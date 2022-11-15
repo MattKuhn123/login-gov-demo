@@ -2,7 +2,10 @@ package kuhn.example.logingovdemo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
 @SpringBootApplication
 public class LoginGovDemoApplication {
 
@@ -10,4 +13,8 @@ public class LoginGovDemoApplication {
 		SpringApplication.run(LoginGovDemoApplication.class, args);
 	}
 
+	@GetMapping("/hello")
+	public String user() {
+		return "Hello!";
+	}
 }
