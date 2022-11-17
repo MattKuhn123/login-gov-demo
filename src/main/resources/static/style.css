@@ -10,12 +10,15 @@
     align-items: center;
 }
 
+.nav-container-vertical > * {
+    margin-top: 10px;
+}
+
 body {
     padding-left: 1%;
     padding-right: 1%;
 }
 
-md-block { 
-    white-space: pre; 
-    font-family: monospace; 
+.code-alt {
+    display: flex;
 }

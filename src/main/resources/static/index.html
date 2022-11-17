@@ -32,7 +32,7 @@
     <header>
         <nav class="nav nav-tabs">
             <a class="nav-link active" data-bs-toggle="tab" data-bs-target="#about" href="#">About</a>
-            <a class="nav-link" data-bs-toggle="tab" data-bs-target="#login-gov-res" href="#">Login Dot Gov Setup</a>
+            <a class="nav-link" data-bs-toggle="tab" data-bs-target="#login-gov-setup" href="#">Login Dot Gov Setup</a>
             <a class="nav-link" data-bs-toggle="tab" data-bs-target="#your-development-info" href="#">Development</a>
             <a class="nav-link" data-bs-toggle="tab" data-bs-target="#your-development-guide" href="#">Guide</a>
             <a class="nav-link" data-bs-toggle="tab" data-bs-target="#your-application" href="#">Your Application</a>
@@ -78,7 +78,7 @@
                 </div>
             </div>
 
-            <div class="tab-pane fade show" id="login-gov-res" role="tabpanel">
+            <div class="tab-pane fade show" id="login-gov-setup" role="tabpanel">
                 <div class="jumbotron">
                     <h1 class="display-4">Login Dot Gov Setup</h1>
                     <p class="lead">Create resources in login dot gov.</p>
@@ -153,34 +153,66 @@
                             <p class="card-text"><u class="text-danger">kuhn.example.logingovdemo.YourAuthenticatedRestController.java</u></p>
                         </div>
                     </div>
+                    <div class="card" style="width: 18rem;">
+                        <img class="card-img-top" src="./images/share.png" alt="share icon">
+                        <div class="card-body">
+                            <h5 class="card-title">See your app</h5>
+                            <p class="card-text">Your app will be in the <u class="text-danger">Your Application</u> tab.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="tab-pane fade show" id="your-development-guide" role="tabpanel">
-                <div class="container nav-container">
-                    <div class="card" style="width: 18rem;">
-                        <img class="card-img-top" src="./images/logingov-logo.png" alt="login dot gov logo">
-                        <div class="card-body">
-                            <h5 class="card-title">Login Dot Gov</h5>
-                            <p class="card-text">Login dot gov is a 3rd party authentication service that you can
-                                integrate into your application to authenticate users with MFA.</p>
-                            <a href="https://developers.login.gov/" class="btn btn-primary" target="_blank">Developer
-                                Dashboard</a>
+                <div class="container nav-container-vertical">
+                    <div class="code-alt">
+                        <div class="card" style="width: 45rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">Create a test endpoint</h5>
+                                <p class="card-text">Just to demonstrate how to request from the front-end to the back end, add the following to <u class="text-danger">kuhn.example.logingovdemo.YourUnauthenticatedRestController</u>.</p>
+                                <md-block>
+                                    ``` java
+                                    @GetMapping("/random")
+                                    public String randomNumber() {
+                                        return String.valueOf(new Random().nextInt());
+                                    }
+                                    ```
+                                </md-block>
+    
+                                <p class="card-text">And add the following to <u class="text-danger">src/main/resources/static/your-application-todo.html</u>.</p>
+                                <md-block>
+                                    ```html
+                                    &lt;div hx-trigger="load" hx-get="/random">
+                                        Loading...
+                                    &lt;/div>
+                                    ```
+                                </md-block>
+                                <p class="card-text">Now, if you click on the <u class="text-danger">Your Application</u> tab, you should see a random number displayed.</p>
+                            </div>
+                        </div>
+                        <div style="width: 5rem;">
+                            <div class="card-body">
+                            </div>
                         </div>
                     </div>
-                    <div class="card" style="width: 18rem;">
-                        <img class="card-img-top" src="./images/logingov-logo.png" alt="login dot gov logo">
-                        <div class="card-body">
-                            <h5 class="card-title">This demo</h5>
-                            <p class="card-text">In this demo, we are going to create a demo application that uses
-                                login.gov's sandbox environment to authenticate users. We are using VS Code and Spring Initialzr</p>
+
+                    <div class="code-alt">
+                        <div style="width: 5rem;">
+                            <div class="card-body">
+                            </div>
+                        </div>
+                        <div class="card" style="width: 45rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">More stuff</h5>
+                                <p class="card-text">There's more content down here.</p>
+                            </div>
                         </div>
                     </div>
+
                 </div>
             </div>
+            
         </div>
     </main>
-
 </body>
-
 </html>
