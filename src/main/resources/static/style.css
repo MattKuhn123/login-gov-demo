@@ -4,7 +4,18 @@
     justify-content: space-evenly;
 }
 
+.nav-container-vertical {
+    display: flex; 
+    flex-direction: column;
+    align-items: center;
+}
+
 body {
     padding-left: 1%;
     padding-right: 1%;
+}
+
+md-block { 
+    white-space: pre; 
+    font-family: monospace; 
 }

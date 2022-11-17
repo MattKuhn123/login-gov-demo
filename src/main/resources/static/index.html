@@ -15,28 +15,37 @@
             "imports": {
                 "bootstrap": "/webjars/bootstrap/dist/js/bootstrap.esm.min.js",
                 "@popperjs/core": "/webjars/popperjs__core/lib/index.js",
-                "htmx": "/webjars/htmx.org/dist/htmx.min.js"
+                "htmx": "/webjars/htmx.org/dist/htmx.min.js",
+                "md": "https://md-block.verou.me/md-block.js"
             }
         }
     </script>
     <script type="module">
         import 'bootstrap';
         import 'htmx';
+        import 'md';
     </script>
+
 </head>
 
 <body>
     <header>
-        <h1>Login Gov Demo</h1>
         <nav class="nav nav-tabs">
             <a class="nav-link active" data-bs-toggle="tab" data-bs-target="#about" href="#">About</a>
-            <a class="nav-link" data-bs-toggle="tab" data-bs-target="#step-one" href="#">Login Dot Gov Setup</a>
-            <a class="nav-link" data-bs-toggle="tab" data-bs-target="#step-two" href="#">Hello</a>
+            <a class="nav-link" data-bs-toggle="tab" data-bs-target="#login-gov-res" href="#">Login Dot Gov Setup</a>
+            <a class="nav-link" data-bs-toggle="tab" data-bs-target="#your-development-info" href="#">Your Development Info</a>
+            <a class="nav-link" data-bs-toggle="tab" data-bs-target="#your-development-guide" href="#">Your Development Guide</a>
+            <a class="nav-link" data-bs-toggle="tab" data-bs-target="#your-application" href="#">Your Application</a>
         </nav>
     </header>
     <main>
         <div class="tab-content">
-            <!-- About -->
+            <div class="tab-pane fade show" id="your-application" role="tabpanel">
+                <div id="your-application-placeholder" hx-trigger="every 1s" hx-get="./your-application-todo.html">
+                    Loading... 
+                </div>
+            </div>
+
             <div class="tab-pane fade show active" id="about" role="tabpanel">
                 <div class="jumbotron">
                     <h1 class="display-4">About</h1>
@@ -59,15 +68,13 @@
                         <div class="card-body">
                             <h5 class="card-title">This demo</h5>
                             <p class="card-text">In this demo, we are going to create a demo application that uses
-                                login.gov's sandbox environment to do authentication.</p>
+                                login.gov's sandbox environment to authenticate users. We are using VS Code and Spring Initialzr</p>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- About -->
 
-            <!-- Step One -->
-            <div class="tab-pane fade show" id="step-one" role="tabpanel">
+            <div class="tab-pane fade show" id="login-gov-res" role="tabpanel">
                 <div class="jumbotron">
                     <h1 class="display-4">Login Dot Gov Setup</h1>
                     <p class="lead">Create resources in login dot gov.</p>
@@ -99,17 +106,14 @@
                         <div class="card-body">
                             <h5 class="card-title">Create an application</h5>
                             <ul class="card-text">
-                                <li>Set authentication protocol to <u class="text-danger">OpenID Connect Private Key
-                                        JWT</u></li>
+                                <li>Set authentication protocol to <u class="text-danger">OpenID Connect Private Key JWT</u></li>
                                 <li>Set Level of Service to <u class="text-danger">Authentication only</u></li>
                                 <li>Check <u class="text-danger">email</u> for Attribute Bundle</li>
-                                <li>For Issuer, I'll be using <u
-                                        class="text-danger">gov:gsa:openidconnect.profiles:sp:sso:tva:kuhn_demo</u></li>
+                                <li>For Issuer, I'll be using <u class="text-danger">gov:gsa:openidconnect.profiles:sp:sso:tva:kuhn_demo</u></li>
                                 <li>Follow their instructions to create a public/private key. For the purposes of this
                                     demo, I'm putting both in <u class="text-danger">src/main/resources/security</u> of
                                     this project</li>
-                                <li>For Redirect URIs, I'll be using <u
-                                        class="text-danger">http://localhost:8080/Redirect</u></li>
+                                <li>For Redirect URIs, I'll be using <u class="text-danger">http://localhost:8080/Redirect</u></li>
                             </ul>
                             <a href="https://dashboard.int.identitysandbox.gov/service_providers"
                                 class="btn btn-primary" target="_blank">Create application</a>
@@ -117,15 +121,59 @@
                     </div>
                 </div>
             </div>
-            <!-- Step One -->
 
-            <!-- Step Two  -->
-            <div class="tab-pane fade show" id="step-two" role="tabpanel">
-                <div class="container">
-
+            <div class="tab-pane fade show" id="your-development-info" role="tabpanel">
+                <div class="jumbotron">
+                    <h1 class="display-4">Info</h1>
+                    <p class="lead">You will be modifying these files</p>
+                </div>
+                <div class="container nav-container">
+                    <div class="card" style="width: 20rem;">
+                        <img class="card-img-top" src="./images/html.png" alt="html icon">
+                        <div class="card-body">
+                            <h5 class="card-title">Front-end</h5>
+                            <p class="card-text"><u class="text-danger">src/main/resources/static/your-application-todo.html</u></p>
+                        </div>
+                    </div>
+                    <div class="card" style="width: 20rem;">
+                        <img class="card-img-top" src="./images/padlock-open.png" alt="unauthenticated icon">
+                        <div class="card-body">
+                            <h5 class="card-title">Unauthenticated Back-end</h5>
+                            <p class="card-text"><u class="text-danger">kuhn.example.controllers.UnauthenticatedRestController.java</u></p>
+                        </div>
+                    </div>
+                    <div class="card" style="width: 20rem;">
+                        <img class="card-img-top" src="./images/padlock-closed.png" alt="authenticated icon">
+                        <div class="card-body">
+                            <h5 class="card-title">Authenticated Back-end</h5>
+                            <p class="card-text"><u class="text-danger">kuhn.example.controllers.AuthenticatedRestController.java</u></p>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <!-- Step Two  -->
+
+            <div class="tab-pane fade show" id="your-development-guide" role="tabpanel">
+                <div class="container nav-container">
+                    <div class="card" style="width: 18rem;">
+                        <img class="card-img-top" src="./images/logingov-logo.png" alt="login dot gov logo">
+                        <div class="card-body">
+                            <h5 class="card-title">Login Dot Gov</h5>
+                            <p class="card-text">Login dot gov is a 3rd party authentication service that you can
+                                integrate into your application to authenticate users with MFA.</p>
+                            <a href="https://developers.login.gov/" class="btn btn-primary" target="_blank">Developer
+                                Dashboard</a>
+                        </div>
+                    </div>
+                    <div class="card" style="width: 18rem;">
+                        <img class="card-img-top" src="./images/logingov-logo.png" alt="login dot gov logo">
+                        <div class="card-body">
+                            <h5 class="card-title">This demo</h5>
+                            <p class="card-text">In this demo, we are going to create a demo application that uses
+                                login.gov's sandbox environment to authenticate users. We are using VS Code and Spring Initialzr</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 
