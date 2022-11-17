@@ -1,0 +1,10 @@
+.nav-container {
+    display: flex; 
+    flex-direction: row; 
+    justify-content: space-evenly;
+}
+
+body {
+    padding-left: 1%;
+    padding-right: 1%;
+}
