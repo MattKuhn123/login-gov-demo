@@ -43,9 +43,12 @@
             <div class="tab-pane fade show" id="your-application" role="tabpanel">
                 <div class="jumbotron">
                     <h1 class="display-4">Your application</h1>
+                    <a class="btn btn-primary" id="refresh-your-application">
+                        Refresh your application
+                    </a>
                     <hr>
                 </div>
-                <div id="your-application-placeholder" hx-trigger="load" hx-get="./your-application-todo.html">
+                <div id="your-application-placeholder" hx-trigger="click from:#refresh-your-application" hx-get="./your-application-todo.html">
                     Loading... 
                 </div>
             </div>
@@ -165,50 +168,62 @@
 
             <div class="tab-pane fade show" id="your-development-guide" role="tabpanel">
                 <div class="container nav-container-vertical">
-                    <div class="code-alt">
-                        <div class="card" style="width: 45rem;">
-                            <div class="card-body">
-                                <h5 class="card-title">Create a test endpoint</h5>
-                                <p class="card-text">Just to demonstrate how to request from the front-end to the back end, add the following to <u class="text-danger">kuhn.example.logingovdemo.YourUnauthenticatedRestController</u>.</p>
-                                <md-block>
-                                    ``` java
-                                    @GetMapping("/random")
-                                    public String randomNumber() {
-                                        return String.valueOf(new Random().nextInt());
-                                    }
-                                    ```
-                                </md-block>
-    
-                                <p class="card-text">And add the following to <u class="text-danger">src/main/resources/static/your-application-todo.html</u>.</p>
-                                <md-block>
-                                    ```html
-                                    &lt;div hx-trigger="load" hx-get="/random">
-                                        Loading...
-                                    &lt;/div>
-                                    ```
-                                </md-block>
-                                <p class="card-text">Now, if you click on the <u class="text-danger">Your Application</u> tab, you should see a random number displayed.</p>
-                            </div>
-                        </div>
-                        <div style="width: 5rem;">
-                            <div class="card-body">
-                            </div>
+                    <div class="card" style="width: 45rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">Create a test endpoint</h5>
+                            <p class="card-text">Just to demonstrate how to request from the front-end to the back end, add the following to <u class="text-danger">kuhn.example.logingovdemo.YourUnauthenticatedRestController</u>.</p>
+                            <md-block>
+                                ``` java
+                                @GetMapping("/random")
+                                public String randomNumber() {
+                                    return String.valueOf(new Random().nextInt());
+                                }
+                                ```
+                            </md-block>
+
+                            <p class="card-text">And add the following to <u class="text-danger">src/main/resources/static/your-application-todo.html</u>.</p>
+                            <md-block>
+                                ```html
+                                &lt;a class="btn btn-primary" hx-trigger="click" hx-get="/random">
+                                    Click me
+                                &lt;/a>
+                                ```
+                            </md-block>
+                            <p class="card-text">Now, if you click on the <u class="text-danger">Your Application</u> tab, you should see a random number displayed.</p>
                         </div>
                     </div>
+                    <div class="card" style="width: 45rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">Create an authenticated endpoint</h5>
+                            <p class="card-text">Let's suppose that one of the endpoints needs to be authenticated.</p>
+                            <p class="card-text">Modify <u class="text-danger">kuhn.example.logingovdemo.YourAuthenticatedRestController</u>.</p>
+                            <md-block>
+                                ``` java
+                                @GetMapping("/random")
+                                public String randomNumber() {
+                                    return "(auth) " + String.valueOf(new Random().nextInt());
+                                }
+                                ```
+                            </md-block>
 
-                    <div class="code-alt">
-                        <div style="width: 5rem;">
-                            <div class="card-body">
-                            </div>
-                        </div>
-                        <div class="card" style="width: 45rem;">
-                            <div class="card-body">
-                                <h5 class="card-title">More stuff</h5>
-                                <p class="card-text">There's more content down here.</p>
-                            </div>
+                            <p class="card-text">And add the following to the end of <u class="text-danger">src/main/resources/static/your-application-todo.html</u></p>
+                            <md-block>
+                                ```html
+                                &lt;a class="btn btn-primary" hx-trigger="click" hx-get="/auth/random">
+                                    (auth) Click me
+                                &lt;/a>
+                                ```
+                            </md-block>
+
+                            <p class="card-text">Now we just need to <u class="text-danger">lock</u> that endpoint down!</p>
                         </div>
                     </div>
-
+                    <div class="card" style="width: 45rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">More MORE stuff</h5>
+                            <p class="card-text">There's more content down here.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
             

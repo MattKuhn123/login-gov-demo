@@ -14,11 +14,11 @@
     margin-top: 10px;
 }
 
+.nav-container-vertical > *:nth-child(even) {
+    background: antiquewhite;
+}
+
 body {
     padding-left: 1%;
     padding-right: 1%;
-}
-
-.code-alt {
-    display: flex;
 }

@@ -12,6 +12,6 @@ public class YourAuthenticatedRestController {
     
     @GetMapping("/random")
     public String randomNumber() {
-        return String.valueOf(new Random().nextInt());
+        return "(auth) " + String.valueOf(new Random().nextInt());
     }
 }
