@@ -1,13 +1,11 @@
-<div class="jumbotron">
-    <h1 class="display-4">Your application</h1>
-    <p class="lead">You will be making changes in here</p>
-</div>
-
 <div class="container nav-container">
     <div class="card" style="width: 18rem;">
         <div class="card-body">
             <h5 class="card-title">Your application</h5>
             <p><u class="text-danger">You</u> will be making changes here</p>
         </div>
+    </div>
+    <div hx-trigger="load" hx-get="/random">
+        Loading...
     </div>
 </div>

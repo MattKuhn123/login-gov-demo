@@ -33,15 +33,19 @@
         <nav class="nav nav-tabs">
             <a class="nav-link active" data-bs-toggle="tab" data-bs-target="#about" href="#">About</a>
             <a class="nav-link" data-bs-toggle="tab" data-bs-target="#login-gov-res" href="#">Login Dot Gov Setup</a>
-            <a class="nav-link" data-bs-toggle="tab" data-bs-target="#your-development-info" href="#">Your Development Info</a>
-            <a class="nav-link" data-bs-toggle="tab" data-bs-target="#your-development-guide" href="#">Your Development Guide</a>
+            <a class="nav-link" data-bs-toggle="tab" data-bs-target="#your-development-info" href="#">Development</a>
+            <a class="nav-link" data-bs-toggle="tab" data-bs-target="#your-development-guide" href="#">Guide</a>
             <a class="nav-link" data-bs-toggle="tab" data-bs-target="#your-application" href="#">Your Application</a>
         </nav>
     </header>
     <main>
         <div class="tab-content">
             <div class="tab-pane fade show" id="your-application" role="tabpanel">
-                <div id="your-application-placeholder" hx-trigger="every 1s" hx-get="./your-application-todo.html">
+                <div class="jumbotron">
+                    <h1 class="display-4">Your application</h1>
+                    <hr>
+                </div>
+                <div id="your-application-placeholder" hx-trigger="load" hx-get="./your-application-todo.html">
                     Loading... 
                 </div>
             </div>
@@ -128,25 +132,25 @@
                     <p class="lead">You will be modifying these files</p>
                 </div>
                 <div class="container nav-container">
-                    <div class="card" style="width: 20rem;">
+                    <div class="card" style="width: 18rem;">
                         <img class="card-img-top" src="./images/html.png" alt="html icon">
                         <div class="card-body">
                             <h5 class="card-title">Front-end</h5>
                             <p class="card-text"><u class="text-danger">src/main/resources/static/your-application-todo.html</u></p>
                         </div>
                     </div>
-                    <div class="card" style="width: 20rem;">
+                    <div class="card" style="width: 18rem;">
                         <img class="card-img-top" src="./images/padlock-open.png" alt="unauthenticated icon">
                         <div class="card-body">
                             <h5 class="card-title">Unauthenticated Back-end</h5>
-                            <p class="card-text"><u class="text-danger">kuhn.example.controllers.UnauthenticatedRestController.java</u></p>
+                            <p class="card-text"><u class="text-danger">kuhn.example.logingovdemo.YourUnauthenticatedRestController.java</u></p>
                         </div>
                     </div>
-                    <div class="card" style="width: 20rem;">
+                    <div class="card" style="width: 18rem;">
                         <img class="card-img-top" src="./images/padlock-closed.png" alt="authenticated icon">
                         <div class="card-body">
                             <h5 class="card-title">Authenticated Back-end</h5>
-                            <p class="card-text"><u class="text-danger">kuhn.example.controllers.AuthenticatedRestController.java</u></p>
+                            <p class="card-text"><u class="text-danger">kuhn.example.logingovdemo.YourAuthenticatedRestController.java</u></p>
                         </div>
                     </div>
                 </div>
