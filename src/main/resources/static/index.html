@@ -101,9 +101,9 @@
                         <img class="card-img-top" src="./images/logingov-logo.png" alt="login dot gov logo">
                         <div class="card-body">
                             <h5 class="card-title">Create a team</h5>
-                            <p class="card-text">An app must be associated with a team. For agency, use<u
+                            <p class="card-text">An app must be associated with a team. For agency, use <span
                                     class="text-danger">Tennessee Valley
-                                    Authority</u></p>
+                                    Authority</span></p>
                             <a href="https://dashboard.int.identitysandbox.gov/teams" class="btn btn-primary"
                                 target="_blank">Create team</a>
                         </div>
@@ -113,14 +113,14 @@
                         <div class="card-body">
                             <h5 class="card-title">Create an application</h5>
                             <ul class="card-text">
-                                <li>Set authentication protocol to <u class="text-danger">OpenID Connect Private Key JWT</u></li>
-                                <li>Set Level of Service to <u class="text-danger">Authentication only</u></li>
-                                <li>Check <u class="text-danger">email</u> for Attribute Bundle</li>
-                                <li>For Issuer, I'll be using <u class="text-danger">gov:gsa:openidconnect.profiles:sp:sso:tva:kuhn_demo</u></li>
+                                <li>Set authentication protocol to <span class="text-danger">OpenID Connect Private Key JWT</span></li>
+                                <li>Set Level of Service to <span class="text-danger">Authentication only</span></li>
+                                <li>Check <span class="text-danger">email</span> for Attribute Bundle</li>
+                                <li>For Issuer, I'll be using <span class="text-danger">gov:gsa:openidconnect.profiles:sp:sso:tva:kuhn_demo</span></li>
                                 <li>Follow their instructions to create a public/private key. For the purposes of this
-                                    demo, I'm putting both in <u class="text-danger">src/main/resources/security</u> of
+                                    demo, I'm putting both in <span class="text-danger">src/main/resources/security</span> of
                                     this project</li>
-                                <li>For Redirect URIs, I'll be using <u class="text-danger">http://localhost:8080/Redirect</u></li>
+                                <li>For Redirect URIs, I'll be using <span class="text-danger">http://localhost:8080/Redirect</span></li>
                             </ul>
                             <a href="https://dashboard.int.identitysandbox.gov/service_providers"
                                 class="btn btn-primary" target="_blank">Create application</a>
@@ -139,28 +139,35 @@
                         <img class="card-img-top" src="./images/html.png" alt="html icon">
                         <div class="card-body">
                             <h5 class="card-title">Front-end</h5>
-                            <p class="card-text"><u class="text-danger">src/main/resources/static/your-application-todo.html</u></p>
+                            <p class="card-text"><span class="text-danger">src/main/resources/static/your-application-todo.html</span></p>
+                        </div>
+                    </div>
+                    <div class="card" style="width: 18rem;">
+                        <img class="card-img-top" src="./images/filter.png" alt="filter icon">
+                        <div class="card-body">
+                            <h5 class="card-title">Filter-chain</h5>
+                            <p class="card-text"><span class="text-danger">kuhn.example.logingovdemo.JwtAuthenticationFilter.java</span></p>
                         </div>
                     </div>
                     <div class="card" style="width: 18rem;">
                         <img class="card-img-top" src="./images/padlock-open.png" alt="unauthenticated icon">
                         <div class="card-body">
                             <h5 class="card-title">Unauthenticated Back-end</h5>
-                            <p class="card-text"><u class="text-danger">kuhn.example.logingovdemo.YourUnauthenticatedRestController.java</u></p>
+                            <p class="card-text"><span class="text-danger">kuhn.example.logingovdemo.YourUnauthenticatedRestController.java</span></p>
                         </div>
                     </div>
-                    <div class="card" style="width: 18rem;">
+                    <div class="card" style="width: 18rem; margin-right: 30px;">
                         <img class="card-img-top" src="./images/padlock-closed.png" alt="authenticated icon">
                         <div class="card-body">
                             <h5 class="card-title">Authenticated Back-end</h5>
-                            <p class="card-text"><u class="text-danger">kuhn.example.logingovdemo.YourAuthenticatedRestController.java</u></p>
+                            <p class="card-text"><span class="text-danger">kuhn.example.logingovdemo.YourAuthenticatedRestController.java</span></p>
                         </div>
                     </div>
                     <div class="card" style="width: 18rem;">
                         <img class="card-img-top" src="./images/share.png" alt="share icon">
                         <div class="card-body">
                             <h5 class="card-title">See your app</h5>
-                            <p class="card-text">Your app will be in the <u class="text-danger">Your Application</u> tab.</p>
+                            <p class="card-text">Your app will be in the <span class="text-danger">Your Application</span> tab.</p>
                         </div>
                     </div>
                 </div>
@@ -171,7 +178,8 @@
                     <div class="card" style="width: 45rem;">
                         <div class="card-body">
                             <h5 class="card-title">Create a test endpoint</h5>
-                            <p class="card-text">Just to demonstrate how to request from the front-end to the back end, add the following to <u class="text-danger">kuhn.example.logingovdemo.YourUnauthenticatedRestController</u>.</p>
+                            <p class="card-text">Let's demonstrate how to request from the front-end to the back end.</p> 
+                            <p>Add the following to <span class="text-danger">kuhn.example.logingovdemo.YourUnauthenticatedRestController</span>.</p>
                             <md-block>
                                 ``` java
                                 @GetMapping("/random")
@@ -181,7 +189,7 @@
                                 ```
                             </md-block>
 
-                            <p class="card-text">And add the following to <u class="text-danger">src/main/resources/static/your-application-todo.html</u>.</p>
+                            <p class="card-text">And add the following to <span class="text-danger">src/main/resources/static/your-application-todo.html</span>.</p>
                             <md-block>
                                 ```html
                                 &lt;a class="btn btn-primary" hx-trigger="click" hx-get="/random">
@@ -189,14 +197,14 @@
                                 &lt;/a>
                                 ```
                             </md-block>
-                            <p class="card-text">Now, if you click on the <u class="text-danger">Your Application</u> tab, you should see a random number displayed.</p>
+                            <p class="card-text">Now, if you click on the <span class="text-danger">Your Application</span> tab, you should see a random number displayed.</p>
                         </div>
                     </div>
                     <div class="card" style="width: 45rem;">
                         <div class="card-body">
                             <h5 class="card-title">Create an authenticated endpoint</h5>
                             <p class="card-text">Let's suppose that one of the endpoints needs to be authenticated.</p>
-                            <p class="card-text">Modify <u class="text-danger">kuhn.example.logingovdemo.YourAuthenticatedRestController</u>.</p>
+                            <p class="card-text">Add the following to <span class="text-danger">kuhn.example.logingovdemo.YourAuthenticatedRestController</span>.</p>
                             <md-block>
                                 ``` java
                                 @GetMapping("/random")
@@ -206,7 +214,7 @@
                                 ```
                             </md-block>
 
-                            <p class="card-text">And add the following to the end of <u class="text-danger">src/main/resources/static/your-application-todo.html</u></p>
+                            <p class="card-text">And add the following to the end of <span class="text-danger">src/main/resources/static/your-application-todo.html</span></p>
                             <md-block>
                                 ```html
                                 &lt;a class="btn btn-primary" hx-trigger="click" hx-get="/auth/random">
@@ -215,12 +223,12 @@
                                 ```
                             </md-block>
 
-                            <p class="card-text">Now we just need to <u class="text-danger">lock</u> that endpoint down!</p>
+                            <p class="card-text">Now we need to <span class="text-danger">lock</span> that endpoint down!</p>
                         </div>
                     </div>
                     <div class="card" style="width: 45rem;">
                         <div class="card-body">
-                            <h5 class="card-title">More MORE stuff</h5>
+                            <h5 class="card-title">Lock that endpoint down</h5>
                             <p class="card-text">There's more content down here.</p>
                         </div>
                     </div>
