@@ -34,7 +34,7 @@ public class YourJwtAuthenticationFilter implements Filter {
     @Bean
     public FilterRegistrationBean<YourJwtAuthenticationFilter> jwtFilter() {
         FilterRegistrationBean<YourJwtAuthenticationFilter> registrationBean = new FilterRegistrationBean<>();
-        registrationBean.setFilter(new YourJwtAuthenticationFilter());
+        registrationBean.setFilter(this);
         registrationBean.addUrlPatterns("/auth/*");
         return registrationBean; 
     }

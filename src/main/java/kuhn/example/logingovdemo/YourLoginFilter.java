@@ -11,12 +11,19 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 @Component
 public class YourLoginFilter implements Filter {
-    private final String clientId = "gov:gsa:openidconnect.profiles:sp:sso:tva:kuhn_demo"; // TODO : Replace with your clientId
-    private final String redirectUri = "http://localhost:8080/Redirect"; // TODO : Replace with your Redirect URI
+
+    private final String clientId;
+    private final String redirectUri;
+
+    public YourLoginFilter(final Environment env) {
+        clientId = env.getProperty("clientId");
+        redirectUri = env.getProperty("redirectUri");
+    }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -30,7 +37,7 @@ public class YourLoginFilter implements Filter {
                 + "redirect_uri=%s&"
                 + "response_type=code&"
                 + "scope=openid+email&"
-                + "state=%s", clientId, java.util.UUID.randomUUID(), redirectUri, java.util.UUID.randomUUID()).toString();
+                + "state=%s", clientId, java.util.UUID.randomUUID(), redirectUri, java.util.UUID.randomUUID());
         System.out.println("redirecting to: " + redirectTo);
         ((HttpServletResponse) response).setHeader("HX-Redirect", redirectTo);
         chain.doFilter(request, response);
@@ -40,7 +47,7 @@ public class YourLoginFilter implements Filter {
     @Bean
     public FilterRegistrationBean<YourLoginFilter> loginFilter() {
         FilterRegistrationBean<YourLoginFilter> registrationBean = new FilterRegistrationBean<>();
-        registrationBean.setFilter(new YourLoginFilter());
+        registrationBean.setFilter(this);
         registrationBean.addUrlPatterns("/login");
         return registrationBean; 
     }

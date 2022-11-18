@@ -11,12 +11,17 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 @Component
 public class YourLogoutFilter implements Filter {
-    private final String clientId = "gov:gsa:openidconnect.profiles:sp:sso:tva:kuhn_demo"; // TODO : Replace with your clientId
-    private final String redirectUri = "http://localhost:8080/"; // TODO : Replace with your Redirect URI
+    
+    private final String clientId;
+
+    public YourLogoutFilter(final Environment env) {
+        clientId = env.getProperty("clientId");
+    }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -25,7 +30,7 @@ public class YourLogoutFilter implements Filter {
         final String redirectTo = String.format("https://idp.int.identitysandbox.gov/openid_connect/logout?"
                 + "client_id=%s&"
                 + "post_logout_redirect_uri=%s&"
-                + "state=%s", clientId, redirectUri, java.util.UUID.randomUUID()).toString();
+                + "state=%s", clientId, "http://localhost:8080/", java.util.UUID.randomUUID());
         System.out.println("redirecting to: " + redirectTo);
         ((HttpServletResponse) response).setHeader("HX-Redirect", redirectTo);
         chain.doFilter(request, response);
@@ -35,7 +40,7 @@ public class YourLogoutFilter implements Filter {
     @Bean
     public FilterRegistrationBean<YourLogoutFilter> logoutFilter() {
         FilterRegistrationBean<YourLogoutFilter> registrationBean = new FilterRegistrationBean<>();
-        registrationBean.setFilter(new YourLogoutFilter());
+        registrationBean.setFilter(this);
         registrationBean.addUrlPatterns("/logout");
         return registrationBean; 
     }

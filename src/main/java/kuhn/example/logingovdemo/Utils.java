@@ -20,15 +20,15 @@ public class Utils {
      * @param pemLocation Where your pem file is.
      * @return the client assertion
      */
-    public static String createClientAssertion(final String clientId, final String pemLocation) {
+    public static String createClientAssertion(final String clientId) {
         try {
             return JWT.create()
                     .withIssuer(clientId)
                     .withSubject(clientId)
                     .withAudience("https://idp.int.identitysandbox.gov/api/openid_connect/token")
                     .withJWTId(java.util.UUID.randomUUID().toString())
-                    .withExpiresAt(Instant.ofEpochMilli(Instant.now().toEpochMilli() + 1000))
-                    .sign(Algorithm.RSA256(getPrivateKey(pemLocation)));
+                    .withExpiresAt(Instant.ofEpochMilli(Instant.now().toEpochMilli() + 100000))
+                    .sign(Algorithm.RSA256(getPrivateKey()));
         } catch (Exception e) {
             System.out.println("Something went wrong generating the client assertion");
             e.printStackTrace();
@@ -36,13 +36,13 @@ public class Utils {
         }
     }
 
-    public static RSAPrivateKey getPrivateKey(final String pemLocation) throws Exception {
+    public static RSAPrivateKey getPrivateKey() throws Exception {
         try {
             return (RSAPrivateKey) KeyFactory.getInstance("RSA")
                     .generatePrivate(new PKCS8EncodedKeySpec(Base64.getDecoder()
                             .decode(FileCopyUtils
                                     .copyToString(new InputStreamReader(
-                                            new DefaultResourceLoader().getResource(pemLocation).getInputStream()))
+                                            new DefaultResourceLoader().getResource(LoginGovDemoApplication.PEM_LOCATION).getInputStream()))
                                     .replace("-----BEGIN PRIVATE KEY-----", "")
                                     .replaceAll("\n", "").replace("-----END PRIVATE KEY-----", ""))));
         } catch (Exception e) {

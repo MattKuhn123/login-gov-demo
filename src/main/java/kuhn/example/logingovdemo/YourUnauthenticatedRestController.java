@@ -2,6 +2,9 @@ package kuhn.example.logingovdemo;
 
 import java.util.Random;
 
+import org.codehaus.jettison.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,8 +16,9 @@ import org.springframework.web.servlet.view.RedirectView;
 @RestController
 @RequestMapping("/")
 public class YourUnauthenticatedRestController {
-    private final String clientId = "gov:gsa:openidconnect.profiles:sp:sso:tva:kuhn_demo"; // TODO : Replace with your clientId
-    private final String pemLocation = "classpath:security\\private-kuhn-demo.pem"; // TODO : Replace with your pem
+    
+    @Autowired
+    public Environment env;
     
     @GetMapping("/random")
     public String randomNumber() {
@@ -33,16 +37,16 @@ public class YourUnauthenticatedRestController {
     }
 
     @GetMapping("/Redirect")
-    public RedirectView redirect(@RequestParam String code, @RequestParam String state) {
+    public RedirectView redirect(@RequestParam String code, @RequestParam String state) throws Exception {
         System.out.println("login.gov has redirected back to us with an authorization code: " + code);
         final String url = String.format("https://idp.int.identitysandbox.gov/api/openid_connect/token?"
                 + "client_assertion=%s&"
                 + "client_assertion_type=urn:ietf:params:oauth:client-assertion-type:jwt-bearer&"
                 + "code=%s&"
-                + "grant_type=authorization_code", Utils.createClientAssertion(clientId, pemLocation), code);
-        System.out.println("Requesting back to login.gov with the authorization code for a jwt token: " + System.lineSeparator() + url);
-        final String response = new RestTemplate().postForObject(url, null, String.class);
-        System.out.println("Result from request to to login.gov for a jwt token: " + System.lineSeparator() + response);
+                + "grant_type=authorization_code", Utils.createClientAssertion(env.getProperty("clientId")), code);
+        System.out.println("Requesting back to login.gov with the authorization code for a jwt token: " + System.lineSeparator() + url + System.lineSeparator());
+        final TokenResponse response = new TokenResponse(new JSONObject(new RestTemplate().postForObject(url, null, String.class)));
+        System.out.println("Result from request to to login.gov for a jwt token: " + System.lineSeparator() + response.toString() + System.lineSeparator());
         return new RedirectView("");
     }
 }

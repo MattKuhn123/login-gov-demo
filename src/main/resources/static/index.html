@@ -48,7 +48,7 @@
                     </a>
                     <hr>
                 </div>
-                <div id="your-application-placeholder" hx-trigger="click from:#refresh-your-application" hx-get="./your-application-todo.html">
+                <div id="your-application-placeholder" hx-trigger="load, click from:#refresh-your-application" hx-get="./your-application-todo.html">
                     Click the button above to refresh... 
                 </div>
             </div>
@@ -101,8 +101,7 @@
                         <div class="card-body">
                             <h5 class="card-title">Create a team</h5>
                             <p class="card-text">An app must be associated with a team. For agency, use <span
-                                    class="text-danger">Tennessee Valley
-                                    Authority</span></p>
+                                    class="text-danger">Tennessee Valley Authority</span></p>
                             <a href="https://dashboard.int.identitysandbox.gov/teams" class="btn btn-primary"
                                 target="_blank">Create team</a>
                         </div>
@@ -269,7 +268,7 @@
                                 @Bean
                                 public FilterRegistrationBean<YourJwtAuthenticationFilter> jwtFilter() {
                                     FilterRegistrationBean<YourJwtAuthenticationFilter> registrationBean = new FilterRegistrationBean<>();
-                                    registrationBean.setFilter(new YourJwtAuthenticationFilter());
+                                    registrationBean.setFilter(this);
                                     registrationBean.addUrlPatterns("/auth/*");
                                     return registrationBean; 
                                 }
@@ -354,7 +353,7 @@
                                 @Bean
                                 public FilterRegistrationBean<YourLoginFilter> loginFilter() {
                                     FilterRegistrationBean<YourLoginFilter> registrationBean = new FilterRegistrationBean<>();
-                                    registrationBean.setFilter(new YourLoginFilter());
+                                    registrationBean.setFilter(this);
                                     registrationBean.addUrlPatterns("/login");
                                     return registrationBean; 
                                 }
@@ -483,7 +482,7 @@
                                 @Bean
                                 public FilterRegistrationBean<YourLogoutFilter> loginFilter() {
                                     FilterRegistrationBean<YourLogoutFilter> registrationBean = new FilterRegistrationBean<>();
-                                    registrationBean.setFilter(new YourLogoutFilter());
+                                    registrationBean.setFilter(this);
                                     registrationBean.addUrlPatterns("/logout");
                                     return registrationBean; 
                                 }
