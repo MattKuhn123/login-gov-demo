@@ -12,6 +12,7 @@ public class YourAuthenticatedRestController {
     
     @GetMapping("/random")
     public String randomNumber() {
+        System.out.println("In authenticated endpoint");
         return "(auth) " + String.valueOf(new Random().nextInt());
     }
 }

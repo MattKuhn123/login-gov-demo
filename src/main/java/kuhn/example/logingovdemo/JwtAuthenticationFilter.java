@@ -1,22 +1,41 @@
 package kuhn.example.logingovdemo;
 
 import java.io.IOException;
-import java.util.Random;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 @Component
 public class JwtAuthenticationFilter implements Filter {
 
     @Override
-    public void doFilter(final ServletRequest request, final ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        System.out.println("hi! " + String.valueOf(new Random().nextInt()));
-        chain.doFilter(request, response);
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
+        System.out.println("entering chain!");
+        final String val = ((HttpServletRequest) request).getHeader("token");
+        if (val == null || val == "") {
+            ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "The token is not valid.");
+        } else {
+            chain.doFilter(request, response);
+        }
+
+        System.out.println("exiting chain!");
+    }
+
+    @Bean
+    public FilterRegistrationBean<JwtAuthenticationFilter> jwtFilter() {
+        FilterRegistrationBean<JwtAuthenticationFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new JwtAuthenticationFilter());
+        registrationBean.addUrlPatterns("/auth/*");
+        return registrationBean; 
     }
 }

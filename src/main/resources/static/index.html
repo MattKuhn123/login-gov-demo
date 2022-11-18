@@ -175,7 +175,7 @@
 
             <div class="tab-pane fade show" id="your-development-guide" role="tabpanel">
                 <div class="container nav-container-vertical">
-                    <div class="card" style="width: 45rem;">
+                    <div id="create-a-test-endpoint" class="card" style="width: 45rem;">
                         <div class="card-body">
                             <h5 class="card-title">Create a test endpoint</h5>
                             <p class="card-text">Let's demonstrate how to request from the front-end to the back end.</p> 
@@ -184,6 +184,7 @@
                                 ``` java
                                 @GetMapping("/random")
                                 public String randomNumber() {
+                                    System.out.println("In unauthenticated endpoint");
                                     return String.valueOf(new Random().nextInt());
                                 }
                                 ```
@@ -200,7 +201,8 @@
                             <p class="card-text">Now, if you click on the <span class="text-danger">Your Application</span> tab, you should see a random number displayed.</p>
                         </div>
                     </div>
-                    <div class="card" style="width: 45rem;">
+
+                    <div id="create-an-authenticated-endpoint" class="card" style="width: 45rem;">
                         <div class="card-body">
                             <h5 class="card-title">Create an authenticated endpoint</h5>
                             <p class="card-text">Let's suppose that one of the endpoints needs to be authenticated.</p>
@@ -209,6 +211,7 @@
                                 ``` java
                                 @GetMapping("/random")
                                 public String randomNumber() {
+                                    System.out.println("In authenticated endpoint");
                                     return "(auth) " + String.valueOf(new Random().nextInt());
                                 }
                                 ```
@@ -223,13 +226,76 @@
                                 ```
                             </md-block>
 
-                            <p class="card-text">Now we need to <span class="text-danger">lock</span> that endpoint down!</p>
+                            <p class="card-text">Now you have <span class="text-danger">two</span> buttons; one for an authenticated endpoint, and the other for an unauthenticated enpoint.</p>
                         </div>
                     </div>
-                    <div class="card" style="width: 45rem;">
+
+                    <div id="use-the-filter-chain" class="card" style="width: 45rem;">
                         <div class="card-body">
-                            <h5 class="card-title">Lock that endpoint down</h5>
-                            <p class="card-text">There's more content down here.</p>
+                            <h5 class="card-title">Use the filter chain</h5>
+                            <p class="card-text">Add the following to <span class="text-danger">kuhn.example.logingovdemo.JwtAuthenticationFilter</span>.</p>
+                            <md-block>
+                                ``` java
+                                @Override
+                                public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+                                        throws IOException, ServletException {
+                                    System.out.println("entering chain!");
+                                    chain.doFilter(request, response);
+                                    System.out.println("exiting chain!");
+                                }
+                                ```
+                            </md-block>
+
+                            <p class="card-text">Click the buttons on your front-end a few times, and note the <span class="text-danger">logs</span> printed to the console.</p>
+                            <md-block>
+                                ``` bash
+                                    entering chain!
+                                    In unauthenticated endpoint
+                                    exiting chain!
+                                    entering chain!
+                                    In authenticated endpoint
+                                    exiting chain!
+                                ```
+                            </md-block>
+                        </div>
+                    </div>
+
+                    <div id="deny-requests-with-the-filter-chain" class="card" style="width: 45rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">Filter requests with the filter chain</h5>
+                            <p class="card-text">Rewrite <span class="text-danger">doFilter()</span> like so:</p>
+                            <md-block>
+                                ``` java
+                                @Override
+                                public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+                                        throws IOException, ServletException {
+                                    System.out.println("entering chain!");
+                                    final String val = ((HttpServletRequest) request).getHeader("token");
+                                    if (val == null || val == "") {
+                                        ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, 
+                                                "The token is not valid.");
+                                    } else {
+                                        chain.doFilter(request, response);
+                                    }
+                            
+                                    System.out.println("exiting chain!");
+                                }
+                                ```
+                            </md-block>
+
+                            <p class="card-text">Click the buttons on your front-end a few times, and note the <span class="text-danger">logs</span> printed to the console.</p>
+                            <md-block>
+                                ``` bash
+                                    In unauthenticated endpoint
+                                    entering chain!
+                                    exiting chain!
+                                    In unauthenticated endpoint
+                                    entering chain!
+                                    exiting chain!
+                                ```
+                            </md-block>
+
+                            <p class="card-text">Now, all requests to the auth endpoint are failing because they don't have a <span class="text-danger">token</span>.</p>
                         </div>
                     </div>
                 </div>
