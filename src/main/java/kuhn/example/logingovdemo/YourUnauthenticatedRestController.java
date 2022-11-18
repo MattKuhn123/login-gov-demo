@@ -9,20 +9,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.view.RedirectView;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 
 @RestController
 @RequestMapping("/")
 public class YourUnauthenticatedRestController {
     private final String clientId = "gov:gsa:openidconnect.profiles:sp:sso:tva:kuhn_demo"; // TODO : Replace with your clientId
     private final String pemLocation = "classpath:security\\private-kuhn-demo.pem"; // TODO : Replace with your pem
-    private int expirationTime = 1000000; // TODO : Play with this
     
-    private final RestTemplate restTemplate;
-    public YourUnauthenticatedRestController(RestTemplateBuilder restTemplateBuilder) {
-        this.restTemplate = restTemplateBuilder.build();
-    }
-
     @GetMapping("/random")
     public String randomNumber() {
         System.out.println("In unauthenticated endpoint");
@@ -40,15 +33,15 @@ public class YourUnauthenticatedRestController {
     }
 
     @GetMapping("/Redirect")
-    public RedirectView redirect(@RequestParam String code) {
+    public RedirectView redirect(@RequestParam String code, @RequestParam String state) {
         System.out.println("login.gov has redirected back to us with an authorization code: " + code);
         final String url = String.format("https://idp.int.identitysandbox.gov/api/openid_connect/token?"
                 + "client_assertion=%s&"
                 + "client_assertion_type=urn:ietf:params:oauth:client-assertion-type:jwt-bearer&"
                 + "code=%s&"
-                + "grant_type=authorization_code", Utils.createClientAssertion(clientId, expirationTime, pemLocation), code);
+                + "grant_type=authorization_code", Utils.createClientAssertion(clientId, pemLocation), code);
         System.out.println("Requesting back to login.gov with the authorization code for a jwt token: " + System.lineSeparator() + url);
-        final String response = restTemplate.postForObject(url, null, String.class);
+        final String response = new RestTemplate().postForObject(url, null, String.class);
         System.out.println("Result from request to to login.gov for a jwt token: " + System.lineSeparator() + response);
         return new RedirectView("");
     }

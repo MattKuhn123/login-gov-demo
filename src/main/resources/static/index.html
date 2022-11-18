@@ -147,6 +147,7 @@
                             <h5 class="card-title">Filter-chains</h5>
                             <p class="card-text"><span class="text-danger">kuhn.example.logingovdemo.YourJwtAuthenticationFilter.java</span></p>
                             <p class="card-text"><span class="text-danger">kuhn.example.logingovdemo.YourLoginFilter.java</span></p>
+                            <p class="card-text"><span class="text-danger">kuhn.example.logingovdemo.YourLogoutFilter.java</span></p>
                         </div>
                     </div>
                     <div id="controllers" class="card" style="width: 18rem;">
@@ -417,15 +418,15 @@
                                 private int expirationTime = 1000000; // TODO : Play with this
 
                                 @GetMapping("/Redirect")
-                                public RedirectView redirect(@RequestParam String code) {
+                                public RedirectView redirect(@RequestParam String code, @RequestParam String state) {
                                     System.out.println("login.gov has redirected back to us with an authorization code: " + code);
                                     final String url = String.format("https://idp.int.identitysandbox.gov/api/openid_connect/token?"
                                             + "client_assertion=%s&"
                                             + "client_assertion_type=urn:ietf:params:oauth:client-assertion-type:jwt-bearer&"
                                             + "code=%s&"
-                                            + "grant_type=authorization_code", Utils.createClientAssertion(clientId, expirationTime, pemLocation), code);
+                                            + "grant_type=authorization_code", Utils.createClientAssertion(clientId, pemLocation), code);
                                     System.out.println("Requesting back to login.gov with the authorization code for a jwt token: " + System.lineSeparator() + url);
-                                    final String response = restTemplate.postForObject(url, null, String.class);
+                                    final String response = new RestTemplate().postForObject(url, null, String.class);
                                     System.out.println("Result from request to to login.gov for a jwt token: " + System.lineSeparator() + response);
                                     return new RedirectView("");
                                 }
@@ -441,8 +442,8 @@
 
                             <md-block>
                                 ```html
-                                &lt;a class="btn btn-primary" hx-trigger="click" hx-get="/random">
-                                    Click me
+                                &lt;a class="btn btn-secondary" hx-trigger="click" hx-post="/logout">
+                                    Logout
                                 &lt;/a>
                                 ```
                             </md-block>
@@ -454,6 +455,37 @@
                                 @PostMapping("/logout")
                                 public void logout() {
                                     System.out.println("logout endpoint");
+                                }
+                                ```
+                            </md-block>
+
+                            <p class="card-text">Update <span class="text-danger">kuhn.example.logingovdemo.YourLogoutFilter</span>.</p>
+
+                            <md-block>
+                                ```java
+                                private final String clientId = "gov:gsa:openidconnect.profiles:sp:sso:tva:kuhn_demo"; // TODO : Replace with your clientId
+                                private final String redirectUri = "http://localhost:8080/"; // TODO : Replace with your Redirect URI
+                            
+                                @Override
+                                public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+                                        throws IOException, ServletException {
+                                    System.out.println("enter logoutFilter");
+                                    final String redirectTo = String.format("https://idp.int.identitysandbox.gov/openid_connect/logout?"
+                                            + "client_id=%s&"
+                                            + "post_logout_redirect_uri=%s&"
+                                            + "state=%s", clientId, redirectUri, java.util.UUID.randomUUID()).toString();
+                                    System.out.println("redirecting to: " + redirectTo);
+                                    ((HttpServletResponse) response).setHeader("HX-Redirect", redirectTo);
+                                    chain.doFilter(request, response);
+                                    System.out.println("exit logoutFilter");
+                                }
+                            
+                                @Bean
+                                public FilterRegistrationBean<YourLogoutFilter> loginFilter() {
+                                    FilterRegistrationBean<YourLogoutFilter> registrationBean = new FilterRegistrationBean<>();
+                                    registrationBean.setFilter(new YourLogoutFilter());
+                                    registrationBean.addUrlPatterns("/logout");
+                                    return registrationBean; 
                                 }
                                 ```
                             </md-block>
