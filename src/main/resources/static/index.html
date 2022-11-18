@@ -260,10 +260,40 @@
                         </div>
                     </div>
 
-                    <div id="deny-requests-with-the-filter-chain" class="card" style="width: 45rem;">
+                    <div id="filter-requests-with-the-filter-chain" class="card" style="width: 45rem;">
                         <div class="card-body">
                             <h5 class="card-title">Filter requests with the filter chain</h5>
-                            <p class="card-text">Rewrite <span class="text-danger">doFilter()</span> like so:</p>
+                            <p class="card-text">Add the following to <span class="text-danger">kuhn.example.logingovdemo.JwtAuthenticationFilter</span>.</p>
+                            <md-block>
+                                ``` java
+                                @Bean
+                                public FilterRegistrationBean<JwtAuthenticationFilter> jwtFilter() {
+                                    FilterRegistrationBean<JwtAuthenticationFilter> registrationBean = new FilterRegistrationBean<>();
+                                    registrationBean.setFilter(new JwtAuthenticationFilter());
+                                    registrationBean.addUrlPatterns("/auth/*");
+                                    return registrationBean; 
+                                }
+                                ```
+                            </md-block>
+
+                            <p class="card-text">Click the buttons on your front-end a few times, and note the <span class="text-danger">logs</span> printed to the console.</p>
+                            <md-block>
+                                ``` bash
+                                    In unauthenticated endpoint
+                                    entering chain!
+                                    In authenticated endpoint
+                                    exiting chain!
+                                ```
+                            </md-block>
+
+                            <p class="card-text">Now the filter chain is only being applied to requests with <span class="text-danger">/auth</span> in the request uri.</p>
+                        </div>
+                    </div>
+
+                    <div id="deny-requests-with-the-filter-chain" class="card" style="width: 45rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">Deny requests with the filter chain</h5>
+                            <p class="card-text">Rewrite <span class="text-danger">kuhn.example.logingovdemo.JwtAuthenticationFilter.doFilter()</span> like so:</p>
                             <md-block>
                                 ``` java
                                 @Override
@@ -295,7 +325,7 @@
                                 ```
                             </md-block>
 
-                            <p class="card-text">Now, all requests to the auth endpoint are failing because they don't have a <span class="text-danger">token</span>.</p>
+                            <p class="card-text">Now, requests to the auth endpoint are being filtered-out because they don't have a <span class="text-danger">token</span> header.</p>
                         </div>
                     </div>
                 </div>
