@@ -47,9 +47,9 @@ public class YourUnauthenticatedRestController {
                 + "client_assertion_type=urn:ietf:params:oauth:client-assertion-type:jwt-bearer&"
                 + "code=%s&"
                 + "grant_type=authorization_code", loginGovUrl, ClientJWTUtils.createClientAssertion(clientId, loginGovUrl), code);
-        System.out.println("Request: " + System.lineSeparator() + url);
+        System.out.println(String.format("Request: [%s]" + System.lineSeparator(), url);
         final TokenResponse response = new TokenResponse(new JSONObject(new RestTemplate().postForObject(url, null, String.class)));
-        System.out.println("Result: " + System.lineSeparator() + response.toString());
+        System.out.println(String.format("Result: [%s]" + System.lineSeparator(), response.toString()));
         System.out.println("Exit redirect endpoint");
         return new RedirectView("");
     }
