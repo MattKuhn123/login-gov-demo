@@ -417,7 +417,7 @@
                                 private int expirationTime = 1000000; // TODO : Play with this
 
                                 @GetMapping("/Redirect")
-                                public void redirect(@RequestParam String code) {
+                                public RedirectView redirect(@RequestParam String code) {
                                     System.out.println("login.gov has redirected back to us with an authorization code: " + code);
                                     final String url = String.format("https://idp.int.identitysandbox.gov/api/openid_connect/token?"
                                             + "client_assertion=%s&"
@@ -427,6 +427,33 @@
                                     System.out.println("Requesting back to login.gov with the authorization code for a jwt token: " + System.lineSeparator() + url);
                                     final String response = restTemplate.postForObject(url, null, String.class);
                                     System.out.println("Result from request to to login.gov for a jwt token: " + System.lineSeparator() + response);
+                                    return new RedirectView("");
+                                }
+                                ```
+                            </md-block>
+                        </div>
+                    </div>
+
+                    <div id="logout" class="card" style="width: 60rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">Logout</h5>
+                            <p class="card-text">Add a new button to <span class="text-danger">src/main/resources/static/your-application-todo.html</span>.</p>
+
+                            <md-block>
+                                ```html
+                                &lt;a class="btn btn-primary" hx-trigger="click" hx-get="/random">
+                                    Click me
+                                &lt;/a>
+                                ```
+                            </md-block>
+
+                            <p class="card-text">Add a new endpoint to <span class="text-danger">kuhn.example.logingovdemo.YourUnauthenticatedRestController</span>.</p>
+
+                            <md-block>
+                                ```java
+                                @PostMapping("/logout")
+                                public void logout() {
+                                    System.out.println("logout endpoint");
                                 }
                                 ```
                             </md-block>

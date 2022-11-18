@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-
+import org.springframework.web.servlet.view.RedirectView;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 
 @RestController
@@ -34,8 +34,13 @@ public class YourUnauthenticatedRestController {
         System.out.println("login endpoint");
     }
 
+    @PostMapping("/logout")
+    public void logout() {
+        System.out.println("logout endpoint");
+    }
+
     @GetMapping("/Redirect")
-    public void redirect(@RequestParam String code) {
+    public RedirectView redirect(@RequestParam String code) {
         System.out.println("login.gov has redirected back to us with an authorization code: " + code);
         final String url = String.format("https://idp.int.identitysandbox.gov/api/openid_connect/token?"
                 + "client_assertion=%s&"
@@ -45,5 +50,6 @@ public class YourUnauthenticatedRestController {
         System.out.println("Requesting back to login.gov with the authorization code for a jwt token: " + System.lineSeparator() + url);
         final String response = restTemplate.postForObject(url, null, String.class);
         System.out.println("Result from request to to login.gov for a jwt token: " + System.lineSeparator() + response);
+        return new RedirectView("");
     }
 }
