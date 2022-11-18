@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 @Component
-public class JwtAuthenticationFilter implements Filter {
+public class YourJwtAuthenticationFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -32,9 +32,9 @@ public class JwtAuthenticationFilter implements Filter {
     }
 
     @Bean
-    public FilterRegistrationBean<JwtAuthenticationFilter> jwtFilter() {
-        FilterRegistrationBean<JwtAuthenticationFilter> registrationBean = new FilterRegistrationBean<>();
-        registrationBean.setFilter(new JwtAuthenticationFilter());
+    public FilterRegistrationBean<YourJwtAuthenticationFilter> jwtFilter() {
+        FilterRegistrationBean<YourJwtAuthenticationFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new YourJwtAuthenticationFilter());
         registrationBean.addUrlPatterns("/auth/*");
         return registrationBean; 
     }

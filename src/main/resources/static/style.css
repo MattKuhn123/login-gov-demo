@@ -16,6 +16,12 @@
 
 .nav-container-vertical > *:nth-child(even) {
     background: antiquewhite;
+    margin-right: 7%;
+}
+
+.nav-container-vertical > *:nth-child(odd) {
+    background: whitesmoke;
+    margin-left: 7%;
 }
 
 body {

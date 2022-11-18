@@ -43,7 +43,7 @@
             <div class="tab-pane fade show" id="your-application" role="tabpanel">
                 <div class="jumbotron">
                     <h1 class="display-4">Your application</h1>
-                    <a class="btn btn-primary" id="refresh-your-application">
+                    <a class="btn btn-danger" id="refresh-your-application">
                         Refresh your application
                     </a>
                     <hr>
@@ -146,7 +146,7 @@
                         <img class="card-img-top" src="./images/filter.png" alt="filter icon">
                         <div class="card-body">
                             <h5 class="card-title">Filter-chain</h5>
-                            <p class="card-text"><span class="text-danger">kuhn.example.logingovdemo.JwtAuthenticationFilter.java</span></p>
+                            <p class="card-text"><span class="text-danger">kuhn.example.logingovdemo.YourJwtAuthenticationFilter.java</span></p>
                         </div>
                     </div>
                     <div class="card" style="width: 18rem;">
@@ -233,7 +233,7 @@
                     <div id="use-the-filter-chain" class="card" style="width: 45rem;">
                         <div class="card-body">
                             <h5 class="card-title">Use the filter chain</h5>
-                            <p class="card-text">Add the following to <span class="text-danger">kuhn.example.logingovdemo.JwtAuthenticationFilter</span>.</p>
+                            <p class="card-text">Add the following to <span class="text-danger">kuhn.example.logingovdemo.YourJwtAuthenticationFilter</span>.</p>
                             <md-block>
                                 ``` java
                                 @Override
@@ -263,13 +263,13 @@
                     <div id="filter-requests-with-the-filter-chain" class="card" style="width: 45rem;">
                         <div class="card-body">
                             <h5 class="card-title">Filter requests with the filter chain</h5>
-                            <p class="card-text">Add the following to <span class="text-danger">kuhn.example.logingovdemo.JwtAuthenticationFilter</span>.</p>
+                            <p class="card-text">Add the following to <span class="text-danger">kuhn.example.logingovdemo.YourJwtAuthenticationFilter</span>.</p>
                             <md-block>
                                 ``` java
                                 @Bean
-                                public FilterRegistrationBean<JwtAuthenticationFilter> jwtFilter() {
-                                    FilterRegistrationBean<JwtAuthenticationFilter> registrationBean = new FilterRegistrationBean<>();
-                                    registrationBean.setFilter(new JwtAuthenticationFilter());
+                                public FilterRegistrationBean<YourJwtAuthenticationFilter> jwtFilter() {
+                                    FilterRegistrationBean<YourJwtAuthenticationFilter> registrationBean = new FilterRegistrationBean<>();
+                                    registrationBean.setFilter(new YourJwtAuthenticationFilter());
                                     registrationBean.addUrlPatterns("/auth/*");
                                     return registrationBean; 
                                 }
@@ -293,7 +293,7 @@
                     <div id="deny-requests-with-the-filter-chain" class="card" style="width: 45rem;">
                         <div class="card-body">
                             <h5 class="card-title">Deny requests with the filter chain</h5>
-                            <p class="card-text">Rewrite <span class="text-danger">kuhn.example.logingovdemo.JwtAuthenticationFilter.doFilter()</span> like so:</p>
+                            <p class="card-text">Rewrite <span class="text-danger">kuhn.example.logingovdemo.YourJwtAuthenticationFilter.doFilter()</span> like so:</p>
                             <md-block>
                                 ``` java
                                 @Override
@@ -326,6 +326,30 @@
                             </md-block>
 
                             <p class="card-text">Now, requests to the auth endpoint are being filtered-out because they don't have a <span class="text-danger">token</span> header.</p>
+                        </div>
+                    </div>
+
+                    <div id="get-authenticated" class="card" style="width: 45rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">Get authenticated</h5>
+                            <p class="card-text">Add another button to <span class="text-danger">src/main/resources/static/your-application-todo.html</span>:</p>
+                            <md-block>
+                                ``` html
+                                &lt;a class="btn btn-secondary" hx-trigger="click" hx-post="/login">
+                                    Login
+                                &lt;/a>
+                                ```
+                            </md-block>
+
+                            <p class="card-text">And add an endpoint to <span class="text-danger">kuhn.example.logingovdemo.YourUnauthenticatedRestController</span>.</p>
+                            <md-block>
+                                ``` java
+                                @PostMapping("/login")
+                                public void login() {
+                                    System.out.println("In login");
+                                }
+                                ```
+                            </md-block>
                         </div>
                     </div>
                 </div>
