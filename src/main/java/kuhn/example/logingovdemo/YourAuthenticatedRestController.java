@@ -12,7 +12,8 @@ public class YourAuthenticatedRestController {
     
     @GetMapping("/random")
     public String randomNumber() {
-        System.out.println("/auth/random");
+        System.out.println("enter /auth/random");
+        System.out.println("exit /auth/random");
         return "(auth) " + String.valueOf(new Random().nextInt());
     }
 }
