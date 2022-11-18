@@ -41,15 +41,16 @@ public class YourUnauthenticatedRestController {
 
     @GetMapping("/Redirect")
     public RedirectView redirect(@RequestParam String code, @RequestParam String state) throws Exception {
-        System.out.println("login.gov has redirected back to us with an authorization code: " + code);
+        System.out.println("Enter redirect endpoint");
         final String url = String.format("%s/api/openid_connect/token?"
                 + "client_assertion=%s&"
                 + "client_assertion_type=urn:ietf:params:oauth:client-assertion-type:jwt-bearer&"
                 + "code=%s&"
                 + "grant_type=authorization_code", loginGovUrl, ClientJWTUtils.createClientAssertion(clientId, loginGovUrl), code);
-        System.out.println("Requesting back to login.gov with the authorization code for a jwt token: " + System.lineSeparator() + url + System.lineSeparator());
+        System.out.println("Request: " + System.lineSeparator() + url);
         final TokenResponse response = new TokenResponse(new JSONObject(new RestTemplate().postForObject(url, null, String.class)));
-        System.out.println("Result from request to to login.gov for a jwt token: " + System.lineSeparator() + response.toString() + System.lineSeparator());
+        System.out.println("Result: " + System.lineSeparator() + response.toString());
+        System.out.println("Exit redirect endpoint");
         return new RedirectView("");
     }
 }
