@@ -25,26 +25,26 @@ public class YourUnauthenticatedRestController {
     
     @GetMapping("/random")
     public String randomNumber() {
-        System.out.println("enter /random (no auth)");
-        System.out.println("exit /random (no auth)");
+        System.out.println("enter [/random (no auth)]");
+        System.out.println("exit [/random (no auth)]");
         return String.valueOf(new Random().nextInt());
     }
 
     @PostMapping("/login")
     public void login() {
-        System.out.println("enter /login");
-        System.out.println("exit /login");
+        System.out.println("enter [/login]");
+        System.out.println("exit [/login]");
     }
 
     @PostMapping("/logout")
     public void logout() {
-        System.out.println("enter /logout");
-        System.out.println("exit /logout");
+        System.out.println("enter [/logout]");
+        System.out.println("exit [/logout]");
     }
 
     @GetMapping("/redirect")
     public RedirectView redirect(@RequestParam String code, @RequestParam String state) throws Exception {
-        System.out.println("enter /redirect");
+        System.out.println("enter [/redirect]");
         final String url = String.format("%s/api/openid_connect/token?"
                 + "client_assertion=%s&"
                 + "client_assertion_type=urn:ietf:params:oauth:client-assertion-type:jwt-bearer&"
@@ -53,7 +53,7 @@ public class YourUnauthenticatedRestController {
         System.out.println(String.format("Request: [%s]", url));
         final TokenResponse response = new TokenResponse(new JSONObject(new RestTemplate().postForObject(url, null, String.class)));
         System.out.println(String.format("Result: [%s]", response.toString()));
-        System.out.println("exit /redirect");
+        System.out.println("exit [/redirect]");
         return new RedirectView("");
     }
 }
