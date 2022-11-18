@@ -18,10 +18,9 @@ public class TokenResponse {
         tokenType = (String) jsonObject.get("token_type");
         expiresIn = (int) jsonObject.get("expires_in");
         final String encodedIdToken = (String) jsonObject.get("id_token");
-        DecodedJWT decodedJWT = JWT.decode(encodedIdToken);
+        final DecodedJWT decodedJWT = JWT.decode(encodedIdToken);
         nonce = decodedJWT.getClaim("nonce").asString();
         issuer = decodedJWT.getIssuer();
-        System.out.println(nonce);
     }
 
     public String getAccessToken() {
