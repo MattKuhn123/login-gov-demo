@@ -329,10 +329,11 @@
                         </div>
                     </div>
 
-                    <div id="get-authenticated" class="card" style="width: 45rem;">
+                    <div id="sample-redirect" class="card" style="width: 45rem;">
                         <div class="card-body">
-                            <h5 class="card-title">Get authenticated</h5>
-                            <p class="card-text">Add another button to <span class="text-danger">src/main/resources/static/your-application-todo.html</span>:</p>
+                            <h5 class="card-title">Sample redirect - Login phase one</h5>
+                            <p class="card-text">Login.gov uses <span class="text-danger">redirects</span>, so let's practice making one.</p>
+                            <p class="card-text">Add another button to <span class="text-danger">src/main/resources/static/your-application-todo.html</span>.</p>
                             <md-block>
                                 ``` html
                                 &lt;a class="btn btn-secondary" hx-trigger="click" hx-post="/login">
@@ -341,12 +342,31 @@
                                 ```
                             </md-block>
 
-                            <p class="card-text">And add an endpoint to <span class="text-danger">kuhn.example.logingovdemo.YourUnauthenticatedRestController</span>.</p>
+                            <p class="card-text">Add the following two methods to <span class="text-danger">kuhn.example.logingovdemo.YourLoginFilter</span>.</p>
+                            <md-block>
+                                ``` java
+                                @Override
+                                public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+                                        throws IOException, ServletException {
+                                    ((HttpServletResponse) response).setHeader("HX-Redirect", "https://www.yahoo.com");
+                                }
+                            
+                                @Bean
+                                public FilterRegistrationBean<YourLoginFilter> loginFilter() {
+                                    FilterRegistrationBean<YourLoginFilter> registrationBean = new FilterRegistrationBean<>();
+                                    registrationBean.setFilter(new YourLoginFilter());
+                                    registrationBean.addUrlPatterns("/login");
+                                    return registrationBean; 
+                                }
+                                ```
+                            </md-block>
+
+                            <p class="card-text">Add the following endpoint to<span class="text-danger">kuhn.example.logingovdemo.YourUnauthenticatedRestController</span>.</p>
                             <md-block>
                                 ``` java
                                 @PostMapping("/login")
                                 public void login() {
-                                    System.out.println("In login");
+                                    System.out.println("login endpoint");
                                 }
                                 ```
                             </md-block>

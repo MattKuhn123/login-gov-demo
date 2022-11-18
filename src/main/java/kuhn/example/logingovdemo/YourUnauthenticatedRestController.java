@@ -19,7 +19,6 @@ public class YourUnauthenticatedRestController {
 
     @PostMapping("/login")
     public void login() {
-        System.out.println("In login");
-        
+        System.out.println("login endpoint");
     }
 }
