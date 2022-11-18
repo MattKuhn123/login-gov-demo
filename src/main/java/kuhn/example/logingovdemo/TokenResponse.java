@@ -10,16 +10,15 @@ public class TokenResponse {
     private final String accessToken;
     private final String tokenType;
     private final int expiresIn;
-    private final String nonce;
+    private final String encodedIdToken;
     private final String issuer;
 
     public TokenResponse(final JSONObject jsonObject) throws Exception {
         accessToken = (String) jsonObject.get("access_token");
         tokenType = (String) jsonObject.get("token_type");
         expiresIn = (int) jsonObject.get("expires_in");
-        final String encodedIdToken = (String) jsonObject.get("id_token");
+        encodedIdToken = (String) jsonObject.get("id_token");
         final DecodedJWT decodedJWT = JWT.decode(encodedIdToken);
-        nonce = decodedJWT.getClaim("nonce").asString();
         issuer = decodedJWT.getIssuer();
     }
 
@@ -35,8 +34,8 @@ public class TokenResponse {
         return expiresIn;
     }
 
-    public String getNonce() {
-        return nonce;
+    public String getEncodedIdToken() {
+        return encodedIdToken;
     }
 
     public String getIssuer() {
@@ -45,6 +44,6 @@ public class TokenResponse {
 
     @Override
     public String toString() {
-        return String.format("access_token: [%s] token_type: [%s], expires_in: [%s], nonce: [%s], iss: [%s]", accessToken, tokenType, expiresIn, nonce, issuer);
+        return String.format("access_token: [%s] token_type: [%s], expires_in: [%s], encodedIdToken: [%s], iss: [%s]", accessToken, tokenType, expiresIn, encodedIdToken, issuer);
     }
 }

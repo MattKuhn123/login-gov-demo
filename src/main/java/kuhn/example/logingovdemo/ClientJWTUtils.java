@@ -28,7 +28,7 @@ public class ClientJWTUtils {
             return JWT.create()
                     .withIssuer(clientId)
                     .withSubject(clientId)
-                    .withAudience(loginGovUrl + "/api/openid_connect/token")
+                    .withAudience(loginGovUrl + "api/openid_connect/token")
                     .withJWTId(java.util.UUID.randomUUID().toString())
                     .withExpiresAt(Instant.ofEpochMilli(Instant.now().toEpochMilli() + 100000))
                     .sign(Algorithm.RSA256(getPrivateKey()));
@@ -39,7 +39,7 @@ public class ClientJWTUtils {
         }
     }
 
-    public static RSAPrivateKey getPrivateKey() throws Exception {
+    private static RSAPrivateKey getPrivateKey() throws Exception {
         try {
             return (RSAPrivateKey) KeyFactory.getInstance("RSA")
                     .generatePrivate(new PKCS8EncodedKeySpec(Base64.getDecoder()

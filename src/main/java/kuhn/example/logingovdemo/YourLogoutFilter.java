@@ -7,6 +7,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -30,13 +31,18 @@ public class YourLogoutFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         System.out.println(String.format("enter [%s]", getClass().getName()));
-        final String redirectTo = String.format("%s/openid_connect/logout?"
+        final String redirectTo = String.format("%sopenid_connect/logout?"
                 + "client_id=%s&"
                 + "post_logout_redirect_uri=%s&"
                 + "state=%s", loginGovUrl, clientId, redirectUri, java.util.UUID.randomUUID());
         System.out.println("redirecting to: " + redirectTo);
         ((HttpServletResponse) response).setHeader("HX-Redirect", redirectTo);
         chain.doFilter(request, response);
+
+        Cookie cookie = new Cookie("gov.tva.tririga.reva.jwt", "");
+        cookie.setHttpOnly(true);
+        ((HttpServletResponse) response).addCookie(cookie);
+        
         System.out.println(String.format("exit [%s]", getClass().getName()));
     }
 
