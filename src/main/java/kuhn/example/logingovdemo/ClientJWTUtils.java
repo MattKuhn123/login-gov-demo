@@ -13,7 +13,10 @@ import org.springframework.util.FileCopyUtils;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 
-public class Utils {
+public class ClientJWTUtils {
+    // TODO : Replace with your pem
+    public static final String PEM_LOCATION = "classpath:security\\private-kuhn-demo.pem"; 
+
     /**
      * Lots of low-level stuff. Not important for the demonstration
      * @param clientId with login.gov
@@ -42,7 +45,7 @@ public class Utils {
                     .generatePrivate(new PKCS8EncodedKeySpec(Base64.getDecoder()
                             .decode(FileCopyUtils
                                     .copyToString(new InputStreamReader(
-                                            new DefaultResourceLoader().getResource(LoginGovDemoApplication.PEM_LOCATION).getInputStream()))
+                                            new DefaultResourceLoader().getResource(PEM_LOCATION).getInputStream()))
                                     .replace("-----BEGIN PRIVATE KEY-----", "")
                                     .replaceAll("\n", "").replace("-----END PRIVATE KEY-----", ""))));
         } catch (Exception e) {

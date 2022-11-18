@@ -46,7 +46,7 @@ public class YourUnauthenticatedRestController {
                 + "client_assertion=%s&"
                 + "client_assertion_type=urn:ietf:params:oauth:client-assertion-type:jwt-bearer&"
                 + "code=%s&"
-                + "grant_type=authorization_code", loginGovUrl, Utils.createClientAssertion(clientId, loginGovUrl), code);
+                + "grant_type=authorization_code", loginGovUrl, ClientJWTUtils.createClientAssertion(clientId, loginGovUrl), code);
         System.out.println("Requesting back to login.gov with the authorization code for a jwt token: " + System.lineSeparator() + url + System.lineSeparator());
         final TokenResponse response = new TokenResponse(new JSONObject(new RestTemplate().postForObject(url, null, String.class)));
         System.out.println("Result from request to to login.gov for a jwt token: " + System.lineSeparator() + response.toString() + System.lineSeparator());

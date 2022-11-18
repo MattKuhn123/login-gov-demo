@@ -1,8 +1,9 @@
 package kuhn.example.logingovdemo;
 
-import java.util.Base64;
-
 import org.codehaus.jettison.json.JSONObject;
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
 
 public class TokenResponse {
 
@@ -10,14 +11,17 @@ public class TokenResponse {
     private final String tokenType;
     private final int expiresIn;
     private final String nonce;
+    private final String issuer;
 
     public TokenResponse(final JSONObject jsonObject) throws Exception {
         accessToken = (String) jsonObject.get("access_token");
         tokenType = (String) jsonObject.get("token_type");
         expiresIn = (int) jsonObject.get("expires_in");
-        final JSONObject idToken = new JSONObject(new String(Base64.getDecoder().decode((String) jsonObject.get("id_token"))));
-        nonce = (String) idToken.get("nonce");
-        System.out.println(idToken);
+        final String encodedIdToken = (String) jsonObject.get("id_token");
+        DecodedJWT decodedJWT = JWT.decode(encodedIdToken);
+        nonce = decodedJWT.getClaim("nonce").asString();
+        issuer = decodedJWT.getIssuer();
+        System.out.println(nonce);
     }
 
     public String getAccessToken() {
@@ -36,8 +40,12 @@ public class TokenResponse {
         return nonce;
     }
 
+    public String getIssuer() {
+        return issuer;
+    }
+
     @Override
     public String toString() {
-        return String.format("access_token: [%s] token_type: [%s], expires_in: [%s], nonce: [%s]", accessToken, tokenType, expiresIn, nonce);
+        return String.format("access_token: [%s] token_type: [%s], expires_in: [%s], nonce: [%s], iss: [%s]", accessToken, tokenType, expiresIn, nonce, issuer);
     }
 }
