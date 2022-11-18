@@ -49,7 +49,7 @@
                     <hr>
                 </div>
                 <div id="your-application-placeholder" hx-trigger="click from:#refresh-your-application" hx-get="./your-application-todo.html">
-                    Loading... 
+                    Click the button above to refresh... 
                 </div>
             </div>
 
@@ -66,8 +66,7 @@
                             <h5 class="card-title">Login Dot Gov</h5>
                             <p class="card-text">Login dot gov is a 3rd party authentication service that you can
                                 integrate into your application to authenticate users with MFA.</p>
-                            <a href="https://developers.login.gov/" class="btn btn-primary" target="_blank">Developer
-                                Dashboard</a>
+                            <a href="https://developers.login.gov/" class="btn btn-primary" target="_blank">Developer Dashboard</a>
                         </div>
                     </div>
                     <div class="card" style="width: 18rem;">
@@ -175,11 +174,11 @@
                 </div>
 
                 <div class="container nav-container-vertical">
-                    <div id="create-a-test-endpoint" class="card" style="width: 45rem;">
+                    <div id="create-a-test-endpoint" class="card" style="width: 60rem;">
                         <div class="card-body">
                             <h5 class="card-title">Create a test endpoint</h5>
                             <p class="card-text">Let's demonstrate how to request from the front-end to the back end.</p> 
-                            <p>Add the following to <span class="text-danger">kuhn.example.logingovdemo.YourUnauthenticatedRestController</span>.</p>
+                            <p>Add the following endpoint to <span class="text-danger">kuhn.example.logingovdemo.YourUnauthenticatedRestController</span>.</p>
                             <md-block>
                                 ``` java
                                 @GetMapping("/random")
@@ -190,7 +189,7 @@
                                 ```
                             </md-block>
 
-                            <p class="card-text">And add the following to <span class="text-danger">src/main/resources/static/your-application-todo.html</span>.</p>
+                            <p class="card-text">And add the following button to <span class="text-danger">src/main/resources/static/your-application-todo.html</span>.</p>
                             <md-block>
                                 ```html
                                 &lt;a class="btn btn-primary" hx-trigger="click" hx-get="/random">
@@ -202,11 +201,11 @@
                         </div>
                     </div>
 
-                    <div id="create-an-authenticated-endpoint" class="card" style="width: 45rem;">
+                    <div id="create-an-authenticated-endpoint" class="card" style="width: 60rem;">
                         <div class="card-body">
                             <h5 class="card-title">Create an authenticated endpoint</h5>
                             <p class="card-text">Let's suppose that one of the endpoints needs to be authenticated.</p>
-                            <p class="card-text">Add the following to <span class="text-danger">kuhn.example.logingovdemo.YourAuthenticatedRestController</span>.</p>
+                            <p class="card-text">Add the following endpoint to <span class="text-danger">kuhn.example.logingovdemo.YourAuthenticatedRestController</span>.</p>
                             <md-block>
                                 ``` java
                                 @GetMapping("/random")
@@ -217,7 +216,7 @@
                                 ```
                             </md-block>
 
-                            <p class="card-text">And add the following to the end of <span class="text-danger">src/main/resources/static/your-application-todo.html</span></p>
+                            <p class="card-text">And add the following button to the end of <span class="text-danger">src/main/resources/static/your-application-todo.html</span></p>
                             <md-block>
                                 ```html
                                 &lt;a class="btn btn-primary" hx-trigger="click" hx-get="/auth/random">
@@ -230,10 +229,10 @@
                         </div>
                     </div>
 
-                    <div id="use-the-filter-chain" class="card" style="width: 45rem;">
+                    <div id="use-the-filter-chain" class="card" style="width: 60rem;">
                         <div class="card-body">
                             <h5 class="card-title">Use the filter chain</h5>
-                            <p class="card-text">Add the following to <span class="text-danger">kuhn.example.logingovdemo.YourJwtAuthenticationFilter</span>.</p>
+                            <p class="card-text">Add the following filter to <span class="text-danger">kuhn.example.logingovdemo.YourJwtAuthenticationFilter</span>.</p>
                             <md-block>
                                 ``` java
                                 @Override
@@ -260,7 +259,7 @@
                         </div>
                     </div>
 
-                    <div id="filter-requests-with-the-filter-chain" class="card" style="width: 45rem;">
+                    <div id="filter-requests-with-the-filter-chain" class="card" style="width: 60rem;">
                         <div class="card-body">
                             <h5 class="card-title">Filter requests with the filter chain</h5>
                             <p class="card-text">Add the following to <span class="text-danger">kuhn.example.logingovdemo.YourJwtAuthenticationFilter</span>.</p>
@@ -290,7 +289,7 @@
                         </div>
                     </div>
 
-                    <div id="deny-requests-with-the-filter-chain" class="card" style="width: 45rem;">
+                    <div id="deny-requests-with-the-filter-chain" class="card" style="width: 60rem;">
                         <div class="card-body">
                             <h5 class="card-title">Deny requests with the filter chain</h5>
                             <p class="card-text">Rewrite <span class="text-danger">kuhn.example.logingovdemo.YourJwtAuthenticationFilter.doFilter()</span> like so:</p>
@@ -329,9 +328,9 @@
                         </div>
                     </div>
 
-                    <div id="sample-redirect" class="card" style="width: 45rem;">
+                    <div id="sample-redirect" class="card" style="width: 60rem;">
                         <div class="card-body">
-                            <h5 class="card-title">Sample redirect - Login phase one</h5>
+                            <h5 class="card-title">Sample redirect</h5>
                             <p class="card-text">Login.gov uses <span class="text-danger">redirects</span>, so let's practice making one.</p>
                             <p class="card-text">Add another button to <span class="text-danger">src/main/resources/static/your-application-todo.html</span>.</p>
                             <md-block>
@@ -361,7 +360,7 @@
                                 ```
                             </md-block>
 
-                            <p class="card-text">Add the following endpoint to<span class="text-danger">kuhn.example.logingovdemo.YourUnauthenticatedRestController</span>.</p>
+                            <p class="card-text">Add the following endpoint to <span class="text-danger">kuhn.example.logingovdemo.YourUnauthenticatedRestController</span>.</p>
                             <md-block>
                                 ``` java
                                 @PostMapping("/login")
@@ -372,9 +371,69 @@
                             </md-block>
                         </div>
                     </div>
+
+                    <div id="real-redirect" class="card" style="width: 60rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">Redirect - Login phase one</h5>
+                            <p class="card-text">Modify <span class="text-danger">kuhn.example.logingovdemo.YourLoginFilter.doFilter()</span> with a real redirect.</p>
+
+                            <md-block>
+                                ``` java
+                                private final String clientId = "gov:gsa:openidconnect.profiles:sp:sso:tva:kuhn_demo"; // TODO : Replace with your clientId
+                                private final String redirectUri = "http://localhost:8080/Redirect"; // TODO : Replace with your Redirect URI
+                            
+                                @Override
+                                public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+                                        throws IOException, ServletException {
+                                    System.out.println("enter loginFilter");
+                                    final String redirectTo = String.format("https://idp.int.identitysandbox.gov/openid_connect/authorize?"
+                                            + "acr_values=http://idmanagement.gov/ns/assurance/ial/1&"
+                                            + "client_id=%s&"
+                                            + "nonce=$%s&"
+                                            + "prompt=select_account&"
+                                            + "redirect_uri=%s&"
+                                            + "response_type=code&"
+                                            + "scope=openid+email&"
+                                            + "state=%s", clientId, java.util.UUID.randomUUID(), redirectUri, java.util.UUID.randomUUID()).toString();
+                                    System.out.println("redirecting to: " + redirectTo);
+                                    ((HttpServletResponse) response).setHeader("HX-Redirect", redirectTo);
+                                    chain.doFilter(request, response);
+                                    System.out.println("exit loginFilter");
+                                }
+                                ```
+                            </md-block>
+                        </div>
+                    </div>
+
+                    <div id="real-redirect-result" class="card" style="width: 60rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">Redirect - Login phase two</h5>
+                            <p class="card-text">Add a new endpoint to <span class="text-danger">kuhn.example.logingovdemo.YourUnauthenticatedRestController</span> to handle the redirect back to the your application.</p>
+
+                            <md-block>
+                                ``` java
+                                private final String clientId = "gov:gsa:openidconnect.profiles:sp:sso:tva:kuhn_demo"; // TODO : Replace with your clientId
+                                private final String pemLocation = "classpath:security\\private-kuhn-demo.pem"; // TODO : Replace with your pem
+                                private int expirationTime = 1000000; // TODO : Play with this
+
+                                @GetMapping("/Redirect")
+                                public void redirect(@RequestParam String code) {
+                                    System.out.println("login.gov has redirected back to us with an authorization code: " + code);
+                                    final String url = String.format("https://idp.int.identitysandbox.gov/api/openid_connect/token?"
+                                            + "client_assertion=%s&"
+                                            + "client_assertion_type=urn:ietf:params:oauth:client-assertion-type:jwt-bearer&"
+                                            + "code=%s&"
+                                            + "grant_type=authorization_code", Utils.createClientAssertion(clientId, expirationTime, pemLocation), code);
+                                    System.out.println("Requesting back to login.gov with the authorization code for a jwt token: " + System.lineSeparator() + url);
+                                    final String response = restTemplate.postForObject(url, null, String.class);
+                                    System.out.println("Result from request to to login.gov for a jwt token: " + System.lineSeparator() + response);
+                                }
+                                ```
+                            </md-block>
+                        </div>
+                    </div>
                 </div>
             </div>
-            
         </div>
     </main>
 </body>
