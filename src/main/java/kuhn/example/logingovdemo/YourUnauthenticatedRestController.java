@@ -42,7 +42,7 @@ public class YourUnauthenticatedRestController {
         System.out.println("exit /logout");
     }
 
-    @GetMapping("/Redirect")
+    @GetMapping("/redirect")
     public RedirectView redirect(@RequestParam String code, @RequestParam String state) throws Exception {
         System.out.println("enter /redirect");
         final String url = String.format("%s/api/openid_connect/token?"
