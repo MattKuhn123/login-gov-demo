@@ -20,7 +20,7 @@ public class YourJwtAuthenticationFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        System.out.println("entering chain!");
+        System.out.println(String.format("enter [%s]", getClass().getName()));
         final String val = ((HttpServletRequest) request).getHeader("token");
         if (val == null || val == "") {
             ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "The token is not valid.");
@@ -28,7 +28,7 @@ public class YourJwtAuthenticationFilter implements Filter {
             chain.doFilter(request, response);
         }
 
-        System.out.println("exiting chain!");
+        System.out.println(String.format("exit [%s]", getClass().getName()));
     }
 
     @Bean

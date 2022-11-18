@@ -18,23 +18,25 @@ import org.springframework.stereotype.Component;
 public class YourLogoutFilter implements Filter {
     
     private final String clientId;
+    private final String redirectUri;
 
     public YourLogoutFilter(final Environment env) {
         clientId = env.getProperty("clientId");
+        redirectUri = env.getProperty("logoutRedirectUri");
     }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        System.out.println("enter logoutFilter");
+        System.out.println(String.format("enter [%s]", getClass().getName()));
         final String redirectTo = String.format("https://idp.int.identitysandbox.gov/openid_connect/logout?"
                 + "client_id=%s&"
                 + "post_logout_redirect_uri=%s&"
-                + "state=%s", clientId, "http://localhost:8080/", java.util.UUID.randomUUID());
+                + "state=%s", clientId, redirectUri, java.util.UUID.randomUUID());
         System.out.println("redirecting to: " + redirectTo);
         ((HttpServletResponse) response).setHeader("HX-Redirect", redirectTo);
         chain.doFilter(request, response);
-        System.out.println("exit logoutFilter");
+        System.out.println(String.format("exit [%s]", getClass().getName()));
     }
 
     @Bean

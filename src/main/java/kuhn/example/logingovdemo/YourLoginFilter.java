@@ -28,7 +28,7 @@ public class YourLoginFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        System.out.println("enter loginFilter");
+        System.out.println(String.format("enter [%s]", getClass().getName()));
         final String redirectTo = String.format("https://idp.int.identitysandbox.gov/openid_connect/authorize?"
                 + "acr_values=http://idmanagement.gov/ns/assurance/ial/1&"
                 + "client_id=%s&"
@@ -41,7 +41,7 @@ public class YourLoginFilter implements Filter {
         System.out.println("redirecting to: " + redirectTo);
         ((HttpServletResponse) response).setHeader("HX-Redirect", redirectTo);
         chain.doFilter(request, response);
-        System.out.println("exit loginFilter");
+        System.out.println(String.format("exit [%s]", getClass().getName()));
     }
 
     @Bean
