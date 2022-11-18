@@ -4,6 +4,10 @@
     justify-content: space-evenly;
 }
 
+.nav-container > *:last-child {
+    background: whitesmoke;
+}
+
 .nav-container-vertical {
     display: flex; 
     flex-direction: column;
