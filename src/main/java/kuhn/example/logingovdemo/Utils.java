@@ -20,12 +20,12 @@ public class Utils {
      * @param pemLocation Where your pem file is.
      * @return the client assertion
      */
-    public static String createClientAssertion(final String clientId) {
+    public static String createClientAssertion(final String clientId, final String loginGovUrl) {
         try {
             return JWT.create()
                     .withIssuer(clientId)
                     .withSubject(clientId)
-                    .withAudience("https://idp.int.identitysandbox.gov/api/openid_connect/token")
+                    .withAudience(loginGovUrl + "/api/openid_connect/token")
                     .withJWTId(java.util.UUID.randomUUID().toString())
                     .withExpiresAt(Instant.ofEpochMilli(Instant.now().toEpochMilli() + 100000))
                     .sign(Algorithm.RSA256(getPrivateKey()));

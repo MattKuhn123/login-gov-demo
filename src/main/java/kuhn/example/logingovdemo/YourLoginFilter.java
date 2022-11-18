@@ -19,17 +19,18 @@ public class YourLoginFilter implements Filter {
 
     private final String clientId;
     private final String redirectUri;
-
+    private final String loginGovUrl;
     public YourLoginFilter(final Environment env) {
         clientId = env.getProperty("clientId");
         redirectUri = env.getProperty("redirectUri");
+        loginGovUrl = env.getProperty("loginGovUrl");
     }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         System.out.println(String.format("enter [%s]", getClass().getName()));
-        final String redirectTo = String.format("https://idp.int.identitysandbox.gov/openid_connect/authorize?"
+        final String redirectTo = String.format("%s/openid_connect/authorize?"
                 + "acr_values=http://idmanagement.gov/ns/assurance/ial/1&"
                 + "client_id=%s&"
                 + "nonce=$%s&"
@@ -37,7 +38,7 @@ public class YourLoginFilter implements Filter {
                 + "redirect_uri=%s&"
                 + "response_type=code&"
                 + "scope=openid+email&"
-                + "state=%s", clientId, java.util.UUID.randomUUID(), redirectUri, java.util.UUID.randomUUID());
+                + "state=%s", loginGovUrl, clientId, java.util.UUID.randomUUID(), redirectUri, java.util.UUID.randomUUID());
         System.out.println("redirecting to: " + redirectTo);
         ((HttpServletResponse) response).setHeader("HX-Redirect", redirectTo);
         chain.doFilter(request, response);

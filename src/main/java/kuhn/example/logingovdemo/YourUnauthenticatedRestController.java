@@ -3,7 +3,6 @@ package kuhn.example.logingovdemo;
 import java.util.Random;
 
 import org.codehaus.jettison.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,8 +16,12 @@ import org.springframework.web.servlet.view.RedirectView;
 @RequestMapping("/")
 public class YourUnauthenticatedRestController {
     
-    @Autowired
-    public Environment env;
+    private final String loginGovUrl;
+    private final String clientId;
+    public YourUnauthenticatedRestController(Environment env) {
+        loginGovUrl = env.getProperty("loginGovUrl");
+        clientId = env.getProperty("clientId");
+    }
     
     @GetMapping("/random")
     public String randomNumber() {
@@ -39,11 +42,11 @@ public class YourUnauthenticatedRestController {
     @GetMapping("/Redirect")
     public RedirectView redirect(@RequestParam String code, @RequestParam String state) throws Exception {
         System.out.println("login.gov has redirected back to us with an authorization code: " + code);
-        final String url = String.format("https://idp.int.identitysandbox.gov/api/openid_connect/token?"
+        final String url = String.format(loginGovUrl + "/api/openid_connect/token?"
                 + "client_assertion=%s&"
                 + "client_assertion_type=urn:ietf:params:oauth:client-assertion-type:jwt-bearer&"
                 + "code=%s&"
-                + "grant_type=authorization_code", Utils.createClientAssertion(env.getProperty("clientId")), code);
+                + "grant_type=authorization_code", Utils.createClientAssertion(clientId, loginGovUrl), code);
         System.out.println("Requesting back to login.gov with the authorization code for a jwt token: " + System.lineSeparator() + url + System.lineSeparator());
         final TokenResponse response = new TokenResponse(new JSONObject(new RestTemplate().postForObject(url, null, String.class)));
         System.out.println("Result from request to to login.gov for a jwt token: " + System.lineSeparator() + response.toString() + System.lineSeparator());
