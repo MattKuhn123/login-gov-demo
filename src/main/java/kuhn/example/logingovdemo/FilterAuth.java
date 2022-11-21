@@ -33,19 +33,32 @@ public class FilterAuth implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         System.out.println(String.format("enter [%s]", getClass().getName()));
 
-        final String nonce = UtilsCookies.getHttpCookie(request, UtilsCookies.NONCE_NAME);
         final DecodedJWT decodedJWT = JWT.decode(UtilsCookies.getHttpCookie(request, UtilsCookies.JWT_NAME));
-        final boolean iss = decodedJWT.getIssuer().equals(loginGovUrl);
-        final boolean aud = decodedJWT.getClaim("aud").asString().equals(clientId);
-        final boolean expired = new Date(Instant.now().toEpochMilli()).compareTo(decodedJWT.getExpiresAt()) > 0;
-        final boolean non = decodedJWT.getClaim("nonce").asString().substring(1).equals(nonce);
-        
-        if (iss && aud && !expired && non) {
-            chain.doFilter(request, response);
-        } else {
-            ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token invalid");
+        if (!decodedJWT.getIssuer().equals(loginGovUrl)) {
+            System.out.println("Invalid issuer");
+            ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid issuer");
             return;
         }
+
+        if (!decodedJWT.getClaim("aud").asString().equals(clientId)) {
+            System.out.println("Invalid audience");
+            ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid audience");
+            return;
+        }
+
+        if (new Date(Instant.now().toEpochMilli()).after((decodedJWT.getExpiresAt()))) {
+            System.out.println("Token expired");
+            ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token expired");
+            return;
+        }
+
+        if (!decodedJWT.getClaim("nonce").asString().substring(1).equals(UtilsCookies.getHttpCookie(request, UtilsCookies.NONCE_NAME))) {
+            System.out.println("Invalid nonce");
+            ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid nonce");
+            return;
+        }
+
+        chain.doFilter(request, response);
 
         System.out.println(String.format("exit [%s]", getClass().getName()));
     }
