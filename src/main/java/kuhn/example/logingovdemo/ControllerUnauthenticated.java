@@ -11,7 +11,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
 @RequestMapping("/")
-public class YourUnauthenticatedRestController {
+public class ControllerUnauthenticated {
     
     @GetMapping("/random")
     public String randomNumber() {

@@ -15,12 +15,12 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 @Component
-public class YourLoginFilter implements Filter {
+public class FilterLogin implements Filter {
 
     private final String clientId;
     private final String redirectUri;
     private final String loginGovUrl;
-    public YourLoginFilter(final Environment env) {
+    public FilterLogin(final Environment env) {
         clientId = env.getProperty("clientId");
         redirectUri = env.getProperty("redirectUri");
         loginGovUrl = env.getProperty("loginGovUrl");
@@ -46,8 +46,8 @@ public class YourLoginFilter implements Filter {
     }
 
     @Bean
-    public FilterRegistrationBean<YourLoginFilter> loginFilter() {
-        FilterRegistrationBean<YourLoginFilter> registrationBean = new FilterRegistrationBean<>();
+    public FilterRegistrationBean<FilterLogin> loginFilter() {
+        FilterRegistrationBean<FilterLogin> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(this);
         registrationBean.addUrlPatterns("/login");
         return registrationBean; 

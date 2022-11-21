@@ -13,12 +13,13 @@ import org.springframework.util.FileCopyUtils;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 
-public class ClientJWTUtils {
+public class UtilsJwt {
+    public static final String JWT_NAME = "kuhn.example.jwt";
     // TODO : Replace with your pem
     public static final String PEM_LOCATION = "classpath:security\\private-kuhn-demo.pem"; 
 
     /**
-     * Lots of low-level stuff. Not important for the demonstration
+     * Low-level stuff. Not important for the demonstration
      * @param clientId with login.gov
      * @param pemLocation Where your pem file is.
      * @return the client assertion

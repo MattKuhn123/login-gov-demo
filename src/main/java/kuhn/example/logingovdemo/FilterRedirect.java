@@ -18,11 +18,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 @Component
-public class YourRedirectFilter implements Filter {
+public class FilterRedirect implements Filter {
 
     private final String loginGovUrl;
     private final String clientId;
-    public YourRedirectFilter(Environment env) {
+    public FilterRedirect(Environment env) {
         loginGovUrl = env.getProperty("loginGovUrl");
         clientId = env.getProperty("clientId");
     }
@@ -32,12 +32,12 @@ public class YourRedirectFilter implements Filter {
             throws IOException, ServletException {
         System.out.println(String.format("enter [%s]", getClass().getName()));
         final String code = request.getParameter("code");
-        // final String state = request.getParameter("state");
+        final String state = request.getParameter("state");
         final String url = String.format("%sapi/openid_connect/token?"
                 + "client_assertion=%s&"
                 + "client_assertion_type=urn:ietf:params:oauth:client-assertion-type:jwt-bearer&"
                 + "code=%s&"
-                + "grant_type=authorization_code", loginGovUrl, ClientJWTUtils.createClientAssertion(clientId, loginGovUrl), code);
+                + "grant_type=authorization_code", loginGovUrl, UtilsJwt.createClientAssertion(clientId, loginGovUrl), code);
         try {
             System.out.println(String.format("Request: [%s]", url));
             final TokenResponse jwtResponse = new TokenResponse(new JSONObject(new RestTemplate().postForObject(url, null, String.class)));
@@ -46,7 +46,7 @@ public class YourRedirectFilter implements Filter {
                 throw new Exception();
             }
 
-            Cookie cookie = new Cookie("gov.tva.tririga.reva.jwt", jwtResponse.getEncodedIdToken());
+            Cookie cookie = new Cookie(UtilsJwt.JWT_NAME, jwtResponse.getEncodedIdToken());
             cookie.setHttpOnly(true);
             ((HttpServletResponse) response).addCookie(cookie);
 
@@ -61,8 +61,8 @@ public class YourRedirectFilter implements Filter {
     }
 
     @Bean
-    public FilterRegistrationBean<YourRedirectFilter> redirectFilter() {
-        FilterRegistrationBean<YourRedirectFilter> registrationBean = new FilterRegistrationBean<>();
+    public FilterRegistrationBean<FilterRedirect> redirectFilter() {
+        FilterRegistrationBean<FilterRedirect> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(this);
         registrationBean.addUrlPatterns("/redirect");
         return registrationBean; 

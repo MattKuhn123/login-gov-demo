@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/auth")
-public class YourAuthenticatedRestController {
+public class ControllerAuthenticated {
     
     @GetMapping("/random")
     public String randomNumber() {

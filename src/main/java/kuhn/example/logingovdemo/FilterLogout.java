@@ -16,12 +16,12 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 @Component
-public class YourLogoutFilter implements Filter {
+public class FilterLogout implements Filter {
     
     private final String clientId;
     private final String redirectUri;
     private final String loginGovUrl;
-    public YourLogoutFilter(final Environment env) {
+    public FilterLogout(final Environment env) {
         clientId = env.getProperty("clientId");
         redirectUri = env.getProperty("logoutRedirectUri");
         loginGovUrl = env.getProperty("loginGovUrl");
@@ -39,7 +39,7 @@ public class YourLogoutFilter implements Filter {
         ((HttpServletResponse) response).setHeader("HX-Redirect", redirectTo);
         chain.doFilter(request, response);
 
-        Cookie cookie = new Cookie("gov.tva.tririga.reva.jwt", "");
+        Cookie cookie = new Cookie(UtilsJwt.JWT_NAME, "");
         cookie.setHttpOnly(true);
         ((HttpServletResponse) response).addCookie(cookie);
         
@@ -47,8 +47,8 @@ public class YourLogoutFilter implements Filter {
     }
 
     @Bean
-    public FilterRegistrationBean<YourLogoutFilter> logoutFilter() {
-        FilterRegistrationBean<YourLogoutFilter> registrationBean = new FilterRegistrationBean<>();
+    public FilterRegistrationBean<FilterLogout> logoutFilter() {
+        FilterRegistrationBean<FilterLogout> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(this);
         registrationBean.addUrlPatterns("/logout");
         return registrationBean; 
