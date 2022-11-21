@@ -50,7 +50,7 @@ public class ControllerUnauth {
             m.addObject("authenticated", new Date(Instant.now().toEpochMilli()).before((decodedJWT.getExpiresAt())));
         } catch (final Exception e) {
             m.addObject("authenticated", false);
-         }
+        }
 
         return m;
     }
