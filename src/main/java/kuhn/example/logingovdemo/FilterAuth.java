@@ -43,7 +43,7 @@ public class FilterAuth implements Filter {
         if (iss && aud && !expired && non) {
             chain.doFilter(request, response);
         } else {
-            ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token invalid.");
+            ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token invalid");
             return;
         }
 

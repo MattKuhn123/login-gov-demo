@@ -7,9 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class Utils {
-    public static final String JWT_NAME = "kuhn.example.jwt";
-    public static final String STATE_NAME = "kuhn.example.state";
-    public static final String NONCE_NAME = "kuhn.example.nonce";
+    public static final String JWT_NAME = "kuhn.example.cookie.jwt";
+    public static final String STATE_NAME = "kuhn.example.cookie.state";
+    public static final String NONCE_NAME = "kuhn.example.cookie.nonce";
 
     public static String getHttpCookie(final ServletRequest request, final String key) {
         System.out.println(String.format("Getting cookie: [%s]", key));
@@ -28,14 +28,10 @@ public class Utils {
 
     public static void setHttpCookie(final ServletResponse response, final String key, final String value) {
         System.out.println(String.format("Setting cookie: [%s], [%s]", key, value));
-        final Cookie cookie = new Cookie(key, "");
+        final Cookie cookie = new Cookie(key, value);
         cookie.setHttpOnly(true);
-        if ("".equals(value)) {
-            cookie.setMaxAge(0);
-        } else {
-            cookie.setMaxAge(60 * 15);
-        }
-
+        cookie.setMaxAge(60 * 15);
+        
         ((HttpServletResponse) response).addCookie(cookie);
     }
 }

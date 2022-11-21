@@ -51,19 +51,28 @@ public class FilterLoginRedirectResponse implements Filter {
         System.out.println(String.format("Redirected with code [%s], state [%s]", code, state));
 
         if (!state.equals(Utils.getHttpCookie(request, Utils.STATE_NAME))) {
-            ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "State invalid.");
+            System.out.println("State invalid");
+            ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "State invalid");
             return;
+        } else {
+            System.out.println("State valid");
         }
 
         final TokenResponse jwtResponse = getToken(code);
         if (!loginGovUrl.equals(jwtResponse.getIssuer())) {
-            ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Issuer invalid.");
+            System.out.println("Issuer invalid");
+            ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Issuer invalid");
             return;
+        } else {
+            System.out.println("Issuer valid");
         }
 
         if (!jwtResponse.getNonce().equals(Utils.getHttpCookie(request, Utils.NONCE_NAME))) {
-            ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Nonce invalid.");
+            System.out.println("Nonce invalid");
+            ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Nonce invalid");
             return;
+        } else {
+            System.out.println("Nonce valid");
         }
 
         Utils.setHttpCookie(response, Utils.JWT_NAME, jwtResponse.getEncodedIdToken());
