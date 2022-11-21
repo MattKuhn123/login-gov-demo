@@ -30,7 +30,7 @@ public class UserInfoService {
         System.out.println(String.format("Request: [%s]", url));
         final UserInfoResponse userInfoResponse = restTemplate.exchange(url, HttpMethod.GET, entity, UserInfoResponse.class).getBody();
         if (userInfoResponse == null) {
-            throw new ServletException("Failed to get token");
+            throw new ServletException("Failed to get user info");
         }
 
         System.out.println(String.format("Result: [%s]", userInfoResponse.toString()));
