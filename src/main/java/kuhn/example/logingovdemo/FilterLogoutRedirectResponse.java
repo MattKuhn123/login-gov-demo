@@ -21,16 +21,16 @@ public class FilterLogoutRedirectResponse implements Filter {
         System.out.println(String.format("enter [%s]", getClass().getName()));
 
         final String state = req.getParameter("state");
-        if (!state.equals(UtilsCookies.getHttpCookie(req, UtilsCookies.STATE_NAME))) {
+        if (!state.equals(CookieUtils.getHttpCookie(req, CookieUtils.STATE_NAME))) {
             System.out.println("State invalid");
             ((HttpServletResponse) res).sendError(HttpServletResponse.SC_UNAUTHORIZED, "State invalid");
             return;
         }
         
-        UtilsCookies.setHttpCookie(res, UtilsCookies.JWT_NAME, "");
-        UtilsCookies.setHttpCookie(res, UtilsCookies.ACCESS_NAME, "");
-        UtilsCookies.setHttpCookie(res, UtilsCookies.STATE_NAME, "");
-        UtilsCookies.setHttpCookie(res, UtilsCookies.NONCE_NAME, "");
+        CookieUtils.setHttpCookie(res, CookieUtils.JWT_NAME, "");
+        CookieUtils.setHttpCookie(res, CookieUtils.ACCESS_NAME, "");
+        CookieUtils.setHttpCookie(res, CookieUtils.STATE_NAME, "");
+        CookieUtils.setHttpCookie(res, CookieUtils.NONCE_NAME, "");
 
         chain.doFilter(req, res);
 

@@ -6,7 +6,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class UtilsCookies {
+public class CookieUtils {
     public static final String JWT_NAME = "kuhn.example.cookie.jwt";
     public static final String ACCESS_NAME = "kuhn.example.cookie.access";
     public static final String STATE_NAME = "kuhn.example.cookie.state";

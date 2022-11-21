@@ -25,7 +25,7 @@ public class UserInfoService {
         final String url = String.format("%sapi/openid_connect/userinfo", loginGovUrl);
 
         final HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", String.format("Bearer %s", UtilsCookies.getHttpCookie(req, UtilsCookies.ACCESS_NAME)));
+        headers.add("Authorization", String.format("Bearer %s", CookieUtils.getHttpCookie(req, CookieUtils.ACCESS_NAME)));
         final HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
         System.out.println(String.format("Request: [%s]", url));
         final UserInfoResponse userInfoResponse = restTemplate.exchange(url, HttpMethod.GET, entity, UserInfoResponse.class).getBody();

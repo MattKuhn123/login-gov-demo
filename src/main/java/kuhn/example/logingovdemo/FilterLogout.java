@@ -32,7 +32,7 @@ public class FilterLogout implements Filter {
         System.out.println(String.format("enter [%s]", getClass().getName()));
 
         final UUID state = java.util.UUID.randomUUID();
-        UtilsCookies.setHttpCookie(res, UtilsCookies.STATE_NAME, state.toString());
+        CookieUtils.setHttpCookie(res, CookieUtils.STATE_NAME, state.toString());
 
         final String redirectTo = String.format("%sopenid_connect/logout?"
                 + "client_id=%s&"

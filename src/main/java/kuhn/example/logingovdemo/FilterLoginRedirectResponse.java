@@ -28,7 +28,7 @@ public class FilterLoginRedirectResponse implements Filter {
         final String state = req.getParameter("state");
         System.out.println(String.format("Code [%s], state [%s]", code, state));
 
-        if (!state.equals(UtilsCookies.getHttpCookie(req, UtilsCookies.STATE_NAME))) {
+        if (!state.equals(CookieUtils.getHttpCookie(req, CookieUtils.STATE_NAME))) {
             System.out.println("State invalid");
             ((HttpServletResponse) res).sendError(HttpServletResponse.SC_UNAUTHORIZED, "State invalid");
             return;
@@ -37,7 +37,7 @@ public class FilterLoginRedirectResponse implements Filter {
         }
 
         final TokenResponse jwtResponse = tokenService.getToken(code);
-        if (!jwtResponse.getNonce().equals(UtilsCookies.getHttpCookie(req, UtilsCookies.NONCE_NAME))) {
+        if (!jwtResponse.getNonce().equals(CookieUtils.getHttpCookie(req, CookieUtils.NONCE_NAME))) {
             System.out.println("Nonce invalid");
             ((HttpServletResponse) res).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Nonce invalid");
             return;
@@ -45,8 +45,8 @@ public class FilterLoginRedirectResponse implements Filter {
             System.out.println("Nonce valid");
         }
 
-        UtilsCookies.setHttpCookie(res, UtilsCookies.JWT_NAME, jwtResponse.getEncodedIdToken());
-        UtilsCookies.setHttpCookie(res, UtilsCookies.ACCESS_NAME, jwtResponse.getAccessToken());
+        CookieUtils.setHttpCookie(res, CookieUtils.JWT_NAME, jwtResponse.getEncodedIdToken());
+        CookieUtils.setHttpCookie(res, CookieUtils.ACCESS_NAME, jwtResponse.getAccessToken());
 
         chain.doFilter(req, res);
         System.out.println(String.format("exit [%s]", getClass().getName()));
