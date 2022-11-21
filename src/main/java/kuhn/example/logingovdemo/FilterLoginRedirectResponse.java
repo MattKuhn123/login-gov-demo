@@ -50,7 +50,7 @@ public class FilterLoginRedirectResponse implements Filter {
         final String state = request.getParameter("state");
         System.out.println(String.format("Redirected with code [%s], state [%s]", code, state));
 
-        if (!state.equals(Utils.getCookie(request, Utils.STATE_NAME))) {
+        if (!state.equals(Utils.getHttpCookie(request, Utils.STATE_NAME))) {
             ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "State invalid.");
             return;
         }
@@ -61,7 +61,7 @@ public class FilterLoginRedirectResponse implements Filter {
             return;
         }
 
-        if (!jwtResponse.getNonce().equals(Utils.getCookie(request, Utils.NONCE_NAME))) {
+        if (!jwtResponse.getNonce().equals(Utils.getHttpCookie(request, Utils.NONCE_NAME))) {
             ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Nonce invalid.");
             return;
         }

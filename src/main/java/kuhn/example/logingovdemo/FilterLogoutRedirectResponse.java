@@ -19,7 +19,7 @@ public class FilterLogoutRedirectResponse implements Filter {
         System.out.println(String.format("enter [%s]", getClass().getName()));
 
         final String state = request.getParameter("state");
-        if (!state.equals(Utils.getCookie(request, Utils.STATE_NAME))) {
+        if (!state.equals(Utils.getHttpCookie(request, Utils.STATE_NAME))) {
             ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "State invalid.");
             return;
         }

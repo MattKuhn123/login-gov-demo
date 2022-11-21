@@ -11,7 +11,7 @@ public class Utils {
     public static final String STATE_NAME = "kuhn.example.state";
     public static final String NONCE_NAME = "kuhn.example.nonce";
 
-    public static String getCookie(final ServletRequest request, final String key) {
+    public static String getHttpCookie(final ServletRequest request, final String key) {
         System.out.println(String.format("Searching for cookie: [%s]", key));
         for (final Cookie c : ((HttpServletRequest)request).getCookies()) {
             if (!key.equals(c.getName())) {
