@@ -43,6 +43,7 @@ public class TokenResponse {
 
     @Override
     public String toString() {
-        return String.format("access_token: [%s] token_type: [%s], expires_in: [%s], encodedIdToken: [%s]", accessToken, tokenType, expiresIn, encodedIdToken);
+        // return String.format("access_token: [%s] token_type: [%s], expires_in: [%s], encodedIdToken: [%s]", accessToken, tokenType, expiresIn, encodedIdToken);
+        return String.format("access_token: [%s]", accessToken);
     }
 }

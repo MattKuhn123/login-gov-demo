@@ -26,7 +26,7 @@ public class FilterLoginRedirectResponse implements Filter {
         System.out.println(String.format("enter [%s]", getClass().getName()));
         final String code = req.getParameter("code");
         final String state = req.getParameter("state");
-        System.out.println(String.format("Redirected with code [%s], state [%s]", code, state));
+        System.out.println(String.format("Code [%s], state [%s]", code, state));
 
         if (!state.equals(UtilsCookies.getHttpCookie(req, UtilsCookies.STATE_NAME))) {
             System.out.println("State invalid");
