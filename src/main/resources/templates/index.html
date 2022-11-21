@@ -37,7 +37,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Always Displayed</h5>
                         <p class="card-text">This is displayed whether you are logged in or not</p>
-                        <a class="btn btn-info" hx-trigger="click" hx-get="/random">(auth) Random number</a>
+                        <a class="btn btn-info" hx-trigger="click" hx-get="/random">Random number</a>
                     </div>
                 </div>
 
@@ -55,7 +55,7 @@
                         <p class="card-text">This is displayed after logging in</p>
                         <div style="display: flex;flex-wrap: wrap;flex-direction: column;gap: 10px;">
                             <a class="btn btn-danger" hx-trigger="click" hx-get="/auth/random">(auth) Random number</a>
-                            <a class="btn btn-danger" hx-trigger="click" hx-get="/auth/email">Email</a>
+                            <a class="btn btn-danger" hx-trigger="click" hx-get="/auth/email">Get user email</a>
                             <a class="btn btn-danger" hx-trigger="click" hx-post="/logout">Logout</a>
                         </div>
                     </div>
