@@ -28,6 +28,7 @@ public class FilterLogoutRedirectResponse implements Filter {
         }
         
         UtilsCookies.setHttpCookie(res, UtilsCookies.JWT_NAME, "");
+        UtilsCookies.setHttpCookie(res, UtilsCookies.ACCESS_NAME, "");
         UtilsCookies.setHttpCookie(res, UtilsCookies.STATE_NAME, "");
         UtilsCookies.setHttpCookie(res, UtilsCookies.NONCE_NAME, "");
 

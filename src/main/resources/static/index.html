@@ -35,26 +35,26 @@
         <div class="tab-content">
             <div class="jumbotron">
                 <h1 class="display-4">Demo Application</h1>
-                <a class="btn btn-danger" id="refresh-your-application">
-                    Refresh your application
-                </a>
                 <hr>
             </div>
-            <a class="btn btn-primary" hx-trigger="click" hx-get="/random">
-                Click me
-            </a>
+            <div display="flex">
+                <div display="flex">
+                    <h2>Unauthenticated endpoints</h2>
+                    <a class="btn btn-primary" hx-trigger="click" hx-get="/random">Random number</a>
+                    
+                    <a class="btn btn-primary" hx-trigger="click" hx-post="/login">Login</a>
+                    
+                    <a class="btn btn-primary" hx-trigger="click" hx-post="/logout">Logout</a>
+                </div>
+                <div display="flex">
+                    <h2>Authenticated endpoints</h2>
+                    <a class="btn btn-danger" hx-trigger="click" hx-get="/auth/random">(auth) Random number</a>
+        
+                    <a class="btn btn-danger" hx-trigger="click" hx-get="/auth/email">Email</a>
+                </div>
+            </div>
+
             
-            <a class="btn btn-primary" hx-trigger="click" hx-get="/auth/random">
-                (auth) Click me
-            </a>
-            
-            <a class="btn btn-secondary" hx-trigger="click" hx-post="/login">
-                Login
-            </a>
-            
-            <a class="btn btn-secondary" hx-trigger="click" hx-post="/logout">
-                Logout
-            </a>
         </div>
     </main>
 </body>

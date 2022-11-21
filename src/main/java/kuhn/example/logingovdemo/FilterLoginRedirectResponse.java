@@ -46,6 +46,7 @@ public class FilterLoginRedirectResponse implements Filter {
         }
 
         UtilsCookies.setHttpCookie(res, UtilsCookies.JWT_NAME, jwtResponse.getEncodedIdToken());
+        UtilsCookies.setHttpCookie(res, UtilsCookies.ACCESS_NAME, jwtResponse.getAccessToken());
 
         chain.doFilter(req, res);
         System.out.println(String.format("exit [%s]", getClass().getName()));
