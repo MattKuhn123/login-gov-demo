@@ -12,7 +12,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.core.env.Environment;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -106,7 +105,7 @@ public class ControllerUnauth {
     }
 
     @GetMapping("/redirectLogin")
-    public RedirectView redirectLogin(final ServletRequest req, final ServletResponse res, @RequestParam String code, @RequestParam String state, @RequestParam String error) 
+    public RedirectView redirectLogin(final ServletRequest req, final ServletResponse res, @RequestParam String code, @RequestParam String state, @RequestParam(defaultValue = "") String error) 
             throws ServletException, IOException {
         System.out.println(String.format("enter [/redirectLogin], code: [%s], state: [%s], error: [%s]", code, state, error));
         if (!StringUtils.isEmptyOrWhitespace(error)) {
