@@ -12,6 +12,8 @@ public class UtilsCookies {
     public static final String STATE_NAME = "kuhn.example.cookie.state";
     public static final String NONCE_NAME = "kuhn.example.cookie.nonce";
 
+    private static final int fifteenMinutes = 60 * 15;
+
     public static String getHttpCookie(final ServletRequest req, final String key) {
         System.out.println(String.format("Getting cookie: [%s]", key));
         for (final Cookie c : ((HttpServletRequest)req).getCookies()) {
@@ -31,7 +33,7 @@ public class UtilsCookies {
         System.out.println(String.format("Setting cookie: [%s], [%s]", key, value));
         final Cookie cookie = new Cookie(key, value);
         cookie.setHttpOnly(true);
-        cookie.setMaxAge(60 * 15);
+        cookie.setMaxAge(fifteenMinutes);
         
         ((HttpServletResponse) res).addCookie(cookie);
     }
