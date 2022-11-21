@@ -105,7 +105,7 @@ public class ControllerUnauth {
     }
 
     @GetMapping("/redirectLogin")
-    public RedirectView redirectLogin(final ServletRequest req, final ServletResponse res, @RequestParam String code, @RequestParam String state, @RequestParam(defaultValue = "") String error) 
+    public RedirectView redirectLogin(final ServletRequest req, final ServletResponse res, @RequestParam String code, @RequestParam String state, @RequestParam(defaultValue = "", required = false) String error) 
             throws ServletException, IOException {
         System.out.println(String.format("enter [/redirectLogin], code: [%s], state: [%s], error: [%s]", code, state, error));
         if (!StringUtils.isEmptyOrWhitespace(error)) {

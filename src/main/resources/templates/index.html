@@ -52,10 +52,12 @@
                 <div class="card text-white bg-dark mb-3" style="width: 18rem;" th:if="${authenticated}">
                     <div class="card-body">
                         <h5 class="card-title">Authenticated</h5>
-                        <p class="card-text">This is displayed after logged in</p>
-                        <a class="btn btn-danger" hx-trigger="click" hx-get="/auth/random">(auth) Random number</a>
-                        <a class="btn btn-danger" hx-trigger="click" hx-get="/auth/email">Email</a>
-                        <a class="btn btn-danger" hx-trigger="click" hx-post="/logout">Logout</a>
+                        <p class="card-text">This is displayed after logging in</p>
+                        <div style="display: flex;flex-wrap: wrap;flex-direction: column;gap: 10px;">
+                            <a class="btn btn-danger" hx-trigger="click" hx-get="/auth/random">(auth) Random number</a>
+                            <a class="btn btn-danger" hx-trigger="click" hx-get="/auth/email">Email</a>
+                            <a class="btn btn-danger" hx-trigger="click" hx-post="/logout">Logout</a>
+                        </div>
                     </div>
                 </div>
             </div>
