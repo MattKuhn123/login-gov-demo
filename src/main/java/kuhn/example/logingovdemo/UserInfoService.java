@@ -21,7 +21,7 @@ public class UserInfoService {
         restTemplate = builder.build();
     }
 
-    public UserInfoResponse getUserInfo(ServletRequest req) throws ServletException {
+    public UserInfoResponse getUserInfo(final ServletRequest req) throws ServletException {
         final String url = String.format("%sapi/openid_connect/userinfo", loginGovUrl);
 
         final HttpHeaders headers = new HttpHeaders();
