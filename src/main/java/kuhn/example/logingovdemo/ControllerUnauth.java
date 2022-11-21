@@ -33,14 +33,14 @@ public class ControllerUnauth {
     }
 
     @GetMapping("/redirectLogin")
-    public RedirectView redirectLogin(@RequestParam String code, @RequestParam String state) throws Exception {
+    public RedirectView redirectLogin(@RequestParam String code, @RequestParam String state) {
         System.out.println("enter [/redirectLogin]");
         System.out.println("exit [/redirectLogin]");
         return new RedirectView("");
     }
 
     @GetMapping("/redirectLogout")
-    public RedirectView redirectLogout(@RequestParam String state) throws Exception {
+    public RedirectView redirectLogout(@RequestParam String state) {
         System.out.println("enter [/redirectLogout]");
         System.out.println("exit [/redirectLogout]");
         return new RedirectView("");

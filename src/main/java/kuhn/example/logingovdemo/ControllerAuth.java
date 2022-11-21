@@ -22,7 +22,7 @@ public class ControllerAuth {
     public String randomNumber() {
         System.out.println("enter [/auth/random]");
         System.out.println("exit [/auth/random]");
-        return "(auth) " + String.valueOf(new Random().nextInt());
+        return String.format("(auth) %s", String.valueOf(new Random().nextInt()));
     }
 
     @GetMapping("/email")
