@@ -1,6 +1,8 @@
 package kuhn.example.logingovdemo;
 
 import java.io.IOException;
+import java.time.Instant;
+import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
 
@@ -16,7 +18,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
 
 @RestController
 @RequestMapping("/")
@@ -35,6 +41,17 @@ public class ControllerUnauth {
         this.tokenService = tokenService;
     }
     
+    @GetMapping("/")
+    public ModelAndView index(final ServletRequest req) {
+        ModelAndView m = new ModelAndView();
+        m.setViewName("index");
+        try {
+            final DecodedJWT decodedJWT = JWT.decode(CookieUtils.getCookie(req, CookieUtils.JWT_NAME));
+            m.addObject("authenticated", new Date(Instant.now().toEpochMilli()).before((decodedJWT.getExpiresAt())));
+        } catch (final Exception e) { }
+
+        return m;
+    }
 
     @GetMapping("/random")
     public String randomNumber() {

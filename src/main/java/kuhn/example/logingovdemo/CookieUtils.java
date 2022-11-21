@@ -12,12 +12,13 @@ public class CookieUtils {
     public static final String STATE_NAME = "kuhn.example.cookie.state";
     public static final String NONCE_NAME = "kuhn.example.cookie.nonce";
     public static final String AUTHENTICATED_NAME = "kuhn.example.cookie.authenticated";
-    private static final String DOMAIN = "kuhn.example";
     public static final int FIFTEEN_MINUTES = 15 * 60;
 
     public static String getCookie(final ServletRequest req, final String key) {
         System.out.println(String.format("Getting cookie: [%s]", key));
-        for (final Cookie c : ((HttpServletRequest)req).getCookies()) {
+        final HttpServletRequest httpReq = (HttpServletRequest)req;
+        final Cookie[] cookies = httpReq.getCookies();
+        for (final Cookie c : cookies) {
             if (!key.equals(c.getName())) {
                 continue;
             }
@@ -32,30 +33,28 @@ public class CookieUtils {
 
     public static void setHttpCookie(final ServletResponse res, final String key, final String value, final int expiresIn) {
         System.out.println(String.format("Setting cookie: [%s], [%s]", key, value));
-        final Cookie cookie = new Cookie(key, value);
-        cookie.setDomain(DOMAIN);
-        cookie.setHttpOnly(true);
-        cookie.setMaxAge(expiresIn);
+        final Cookie c = new Cookie(key, value);
+        c.setHttpOnly(true);
+        c.setMaxAge(expiresIn);
         
-        ((HttpServletResponse) res).addCookie(cookie);
+        ((HttpServletResponse) res).addCookie(c);
     }
 
     public static void setClientCookie(final ServletResponse res, final String key, final String value, final int expiresIn) {
         System.out.println(String.format("Setting cookie: [%s], [%s]", key, value));
-        final Cookie cookie = new Cookie(key, value);
-        cookie.setDomain(DOMAIN);
-        cookie.setHttpOnly(false);
-        cookie.setMaxAge(expiresIn);
+        final Cookie c = new Cookie(key, value);
+        c.setHttpOnly(false);
+        c.setMaxAge(expiresIn);
         
-        ((HttpServletResponse) res).addCookie(cookie);
+        ((HttpServletResponse) res).addCookie(c);
     }
 
     public static void deleteCookie(final ServletResponse res, final String key) {
         System.out.println(String.format("Deleting cookie: [%s]", key));
-        final Cookie cookie = new Cookie(key, "");
-        cookie.setHttpOnly(true);
-        cookie.setMaxAge(0);
+        final Cookie c = new Cookie(key, "");
+        c.setHttpOnly(true);
+        c.setMaxAge(0);
         
-        ((HttpServletResponse) res).addCookie(cookie);
+        ((HttpServletResponse) res).addCookie(c);
     }
 }
