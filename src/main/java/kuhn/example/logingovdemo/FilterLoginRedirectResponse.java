@@ -73,7 +73,7 @@ public class FilterLoginRedirectResponse implements Filter {
     }
 
     @Bean
-    public FilterRegistrationBean<FilterLoginRedirectResponse> redirectFilter() {
+    public FilterRegistrationBean<FilterLoginRedirectResponse> redirectLoginFilter() {
         FilterRegistrationBean<FilterLoginRedirectResponse> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(this);
         registrationBean.addUrlPatterns("/redirectLogin");

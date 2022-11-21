@@ -12,7 +12,7 @@ public class Utils {
     public static final String NONCE_NAME = "kuhn.example.nonce";
 
     public static String getHttpCookie(final ServletRequest request, final String key) {
-        System.out.println(String.format("Searching for cookie: [%s]", key));
+        System.out.println(String.format("Getting cookie: [%s]", key));
         for (final Cookie c : ((HttpServletRequest)request).getCookies()) {
             if (!key.equals(c.getName())) {
                 continue;
@@ -22,7 +22,7 @@ public class Utils {
             return c.getValue();
         }
 
-        System.out.println(String.format("Did not find cookie: [%s]", key));
+        System.out.println(String.format("Cookie does not exist: [%s]", key));
         throw new IllegalArgumentException(String.format("Did not find [%s] in cookies", key));
     }
 
@@ -30,9 +30,10 @@ public class Utils {
         System.out.println(String.format("Setting cookie: [%s], [%s]", key, value));
         final Cookie cookie = new Cookie(key, "");
         cookie.setHttpOnly(true);
-
         if ("".equals(value)) {
             cookie.setMaxAge(0);
+        } else {
+            cookie.setMaxAge(60 * 15);
         }
 
         ((HttpServletResponse) response).addCookie(cookie);

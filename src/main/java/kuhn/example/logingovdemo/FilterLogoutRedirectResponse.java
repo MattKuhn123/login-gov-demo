@@ -34,7 +34,7 @@ public class FilterLogoutRedirectResponse implements Filter {
     }
     
     @Bean
-    public FilterRegistrationBean<FilterLogoutRedirectResponse> redirectFilter() {
+    public FilterRegistrationBean<FilterLogoutRedirectResponse> redirectLogoutFilter() {
         FilterRegistrationBean<FilterLogoutRedirectResponse> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(this);
         registrationBean.addUrlPatterns("/redirectLogout");

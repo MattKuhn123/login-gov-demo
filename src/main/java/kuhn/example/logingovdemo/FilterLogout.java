@@ -41,10 +41,6 @@ public class FilterLogout implements Filter {
         System.out.println("redirecting to: " + redirectTo);
         ((HttpServletResponse) response).setHeader("HX-Redirect", redirectTo);
         chain.doFilter(request, response);
-
-        Utils.setHttpCookie(response, Utils.JWT_NAME, "");
-        Utils.setHttpCookie(response, Utils.NONCE_NAME, "");
-        
         System.out.println(String.format("exit [%s]", getClass().getName()));
     }
 
