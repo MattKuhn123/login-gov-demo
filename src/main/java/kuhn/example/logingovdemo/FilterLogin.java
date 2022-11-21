@@ -28,14 +28,14 @@ public class FilterLogin implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         System.out.println(String.format("enter [%s]", getClass().getName()));
 
         final UUID nonce = java.util.UUID.randomUUID();
-        UtilsCookies.setHttpCookie(response, UtilsCookies.NONCE_NAME, nonce.toString());
+        UtilsCookies.setHttpCookie(res, UtilsCookies.NONCE_NAME, nonce.toString());
         
         final UUID state = java.util.UUID.randomUUID();
-        UtilsCookies.setHttpCookie(response, UtilsCookies.STATE_NAME, state.toString());
+        UtilsCookies.setHttpCookie(res, UtilsCookies.STATE_NAME, state.toString());
 
         final String redirectTo = String.format("%s/openid_connect/authorize?"
                 + "acr_values=http://idmanagement.gov/ns/assurance/ial/1&"
@@ -47,8 +47,8 @@ public class FilterLogin implements Filter {
                 + "scope=openid+email&"
                 + "state=%s", loginGovUrl, clientId, nonce, loginRedirectUri, state);
         System.out.println("redirecting to: " + redirectTo);
-        ((HttpServletResponse) response).setHeader("HX-Redirect", redirectTo);
-        chain.doFilter(request, response);
+        ((HttpServletResponse) res).setHeader("HX-Redirect", redirectTo);
+        chain.doFilter(req, res);
         System.out.println(String.format("exit [%s]", getClass().getName()));
     }
 

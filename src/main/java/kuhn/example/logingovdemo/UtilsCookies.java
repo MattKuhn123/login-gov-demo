@@ -11,9 +11,9 @@ public class UtilsCookies {
     public static final String STATE_NAME = "kuhn.example.cookie.state";
     public static final String NONCE_NAME = "kuhn.example.cookie.nonce";
 
-    public static String getHttpCookie(final ServletRequest request, final String key) {
+    public static String getHttpCookie(final ServletRequest req, final String key) {
         System.out.println(String.format("Getting cookie: [%s]", key));
-        for (final Cookie c : ((HttpServletRequest)request).getCookies()) {
+        for (final Cookie c : ((HttpServletRequest)req).getCookies()) {
             if (!key.equals(c.getName())) {
                 continue;
             }
@@ -26,12 +26,12 @@ public class UtilsCookies {
         throw new IllegalArgumentException(String.format("Did not find [%s] in cookies", key));
     }
 
-    public static void setHttpCookie(final ServletResponse response, final String key, final String value) {
+    public static void setHttpCookie(final ServletResponse res, final String key, final String value) {
         System.out.println(String.format("Setting cookie: [%s], [%s]", key, value));
         final Cookie cookie = new Cookie(key, value);
         cookie.setHttpOnly(true);
         cookie.setMaxAge(60 * 15);
         
-        ((HttpServletResponse) response).addCookie(cookie);
+        ((HttpServletResponse) res).addCookie(cookie);
     }
 }

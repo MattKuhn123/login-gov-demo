@@ -40,9 +40,21 @@
                 </a>
                 <hr>
             </div>
-            <div id="your-application-placeholder" hx-trigger="load, click from:#refresh-your-application" hx-get="./your-application-todo.html">
-                Click the button above to refresh... 
-            </div>
+            <a class="btn btn-primary" hx-trigger="click" hx-get="/random">
+                Click me
+            </a>
+            
+            <a class="btn btn-primary" hx-trigger="click" hx-get="/auth/random">
+                (auth) Click me
+            </a>
+            
+            <a class="btn btn-secondary" hx-trigger="click" hx-post="/login">
+                Login
+            </a>
+            
+            <a class="btn btn-secondary" hx-trigger="click" hx-post="/logout">
+                Logout
+            </a>
         </div>
     </main>
 </body>

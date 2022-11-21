@@ -17,21 +17,21 @@ import org.springframework.stereotype.Component;
 public class FilterLogoutRedirectResponse implements Filter {
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         System.out.println(String.format("enter [%s]", getClass().getName()));
 
-        final String state = request.getParameter("state");
-        if (!state.equals(UtilsCookies.getHttpCookie(request, UtilsCookies.STATE_NAME))) {
+        final String state = req.getParameter("state");
+        if (!state.equals(UtilsCookies.getHttpCookie(req, UtilsCookies.STATE_NAME))) {
             System.out.println("State invalid");
-            ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "State invalid");
+            ((HttpServletResponse) res).sendError(HttpServletResponse.SC_UNAUTHORIZED, "State invalid");
             return;
         }
         
-        UtilsCookies.setHttpCookie(response, UtilsCookies.JWT_NAME, "");
-        UtilsCookies.setHttpCookie(response, UtilsCookies.STATE_NAME, "");
-        UtilsCookies.setHttpCookie(response, UtilsCookies.NONCE_NAME, "");
+        UtilsCookies.setHttpCookie(res, UtilsCookies.JWT_NAME, "");
+        UtilsCookies.setHttpCookie(res, UtilsCookies.STATE_NAME, "");
+        UtilsCookies.setHttpCookie(res, UtilsCookies.NONCE_NAME, "");
 
-        chain.doFilter(request, response);
+        chain.doFilter(req, res);
 
         System.out.println(String.format("exit [%s]", getClass().getName()));
     }

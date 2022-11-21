@@ -22,32 +22,32 @@ public class FilterLoginRedirectResponse implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         System.out.println(String.format("enter [%s]", getClass().getName()));
-        final String code = request.getParameter("code");
-        final String state = request.getParameter("state");
+        final String code = req.getParameter("code");
+        final String state = req.getParameter("state");
         System.out.println(String.format("Redirected with code [%s], state [%s]", code, state));
 
-        if (!state.equals(UtilsCookies.getHttpCookie(request, UtilsCookies.STATE_NAME))) {
+        if (!state.equals(UtilsCookies.getHttpCookie(req, UtilsCookies.STATE_NAME))) {
             System.out.println("State invalid");
-            ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "State invalid");
+            ((HttpServletResponse) res).sendError(HttpServletResponse.SC_UNAUTHORIZED, "State invalid");
             return;
         } else {
             System.out.println("State valid");
         }
 
         final TokenResponse jwtResponse = tokenService.getToken(code);
-        if (!jwtResponse.getNonce().equals(UtilsCookies.getHttpCookie(request, UtilsCookies.NONCE_NAME))) {
+        if (!jwtResponse.getNonce().equals(UtilsCookies.getHttpCookie(req, UtilsCookies.NONCE_NAME))) {
             System.out.println("Nonce invalid");
-            ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Nonce invalid");
+            ((HttpServletResponse) res).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Nonce invalid");
             return;
         } else {
             System.out.println("Nonce valid");
         }
 
-        UtilsCookies.setHttpCookie(response, UtilsCookies.JWT_NAME, jwtResponse.getEncodedIdToken());
+        UtilsCookies.setHttpCookie(res, UtilsCookies.JWT_NAME, jwtResponse.getEncodedIdToken());
 
-        chain.doFilter(request, response);
+        chain.doFilter(req, res);
         System.out.println(String.format("exit [%s]", getClass().getName()));
     }
 

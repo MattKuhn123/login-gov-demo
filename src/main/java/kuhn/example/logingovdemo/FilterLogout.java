@@ -28,19 +28,19 @@ public class FilterLogout implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         System.out.println(String.format("enter [%s]", getClass().getName()));
 
         final UUID state = java.util.UUID.randomUUID();
-        UtilsCookies.setHttpCookie(response, UtilsCookies.STATE_NAME, state.toString());
+        UtilsCookies.setHttpCookie(res, UtilsCookies.STATE_NAME, state.toString());
 
         final String redirectTo = String.format("%sopenid_connect/logout?"
                 + "client_id=%s&"
                 + "post_logout_redirect_uri=%s&"
                 + "state=%s", loginGovUrl, clientId, logoutRedirectUri, state);
         System.out.println("redirecting to: " + redirectTo);
-        ((HttpServletResponse) response).setHeader("HX-Redirect", redirectTo);
-        chain.doFilter(request, response);
+        ((HttpServletResponse) res).setHeader("HX-Redirect", redirectTo);
+        chain.doFilter(req, res);
         System.out.println(String.format("exit [%s]", getClass().getName()));
     }
 
