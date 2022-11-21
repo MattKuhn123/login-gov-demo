@@ -30,14 +30,16 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 
 @Component
-public class FilterRedirectResponse implements Filter {
+public class FilterLoginRedirectResponse implements Filter {
 
     private final String loginGovUrl;
     private final String clientId;
+    private final String pemLocation;
     private final RestTemplate restTemplate;
-    public FilterRedirectResponse(final Environment env, final RestTemplateBuilder builder) {
+    public FilterLoginRedirectResponse(final Environment env, final RestTemplateBuilder builder) {
         loginGovUrl = env.getProperty("loginGovUrl");
         clientId = env.getProperty("clientId");
+        pemLocation = env.getProperty("pemLocation");
         restTemplate = builder.build();
     }
 
@@ -46,6 +48,7 @@ public class FilterRedirectResponse implements Filter {
         System.out.println(String.format("enter [%s]", getClass().getName()));
         final String code = request.getParameter("code");
         final String state = request.getParameter("state");
+        System.out.println(String.format("Redirected with code [%s], state [%s]", code, state));
 
         if (!state.equals(Utils.getCookie(request, Utils.STATE_NAME))) {
             ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "State invalid.");
@@ -70,10 +73,10 @@ public class FilterRedirectResponse implements Filter {
     }
 
     @Bean
-    public FilterRegistrationBean<FilterRedirectResponse> redirectFilter() {
-        FilterRegistrationBean<FilterRedirectResponse> registrationBean = new FilterRegistrationBean<>();
+    public FilterRegistrationBean<FilterLoginRedirectResponse> redirectFilter() {
+        FilterRegistrationBean<FilterLoginRedirectResponse> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(this);
-        registrationBean.addUrlPatterns("/redirect");
+        registrationBean.addUrlPatterns("/redirectLogin");
         return registrationBean; 
     }
 
@@ -110,16 +113,13 @@ public class FilterRedirectResponse implements Filter {
         }
     }
 
-
-    // TODO : Replace with your pem
-    private final String PEM_LOCATION = "classpath:security\\private-kuhn-demo.pem"; 
     private RSAPrivateKey getPrivateKey() throws Exception {
         try {
             return (RSAPrivateKey) KeyFactory.getInstance("RSA")
                     .generatePrivate(new PKCS8EncodedKeySpec(Base64.getDecoder()
                             .decode(FileCopyUtils
                                     .copyToString(new InputStreamReader(
-                                            new DefaultResourceLoader().getResource(PEM_LOCATION).getInputStream()))
+                                            new DefaultResourceLoader().getResource(pemLocation).getInputStream()))
                                     .replace("-----BEGIN PRIVATE KEY-----", "")
                                     .replaceAll("\n", "").replace("-----END PRIVATE KEY-----", ""))));
         } catch (Exception e) {

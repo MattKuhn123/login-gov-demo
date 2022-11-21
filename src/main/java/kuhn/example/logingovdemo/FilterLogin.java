@@ -19,11 +19,11 @@ import org.springframework.stereotype.Component;
 public class FilterLogin implements Filter {
 
     private final String clientId;
-    private final String redirectUri;
+    private final String loginRedirectUri;
     private final String loginGovUrl;
     public FilterLogin(final Environment env) {
         clientId = env.getProperty("clientId");
-        redirectUri = env.getProperty("redirectUri");
+        loginRedirectUri = env.getProperty("loginRedirectUri");
         loginGovUrl = env.getProperty("loginGovUrl");
     }
 
@@ -45,7 +45,7 @@ public class FilterLogin implements Filter {
                 + "redirect_uri=%s&"
                 + "response_type=code&"
                 + "scope=openid+email&"
-                + "state=%s", loginGovUrl, clientId, nonce, redirectUri, state);
+                + "state=%s", loginGovUrl, clientId, nonce, loginRedirectUri, state);
         System.out.println("redirecting to: " + redirectTo);
         ((HttpServletResponse) response).setHeader("HX-Redirect", redirectTo);
         chain.doFilter(request, response);

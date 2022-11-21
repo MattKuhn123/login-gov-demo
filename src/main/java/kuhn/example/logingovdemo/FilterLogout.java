@@ -19,11 +19,11 @@ import org.springframework.stereotype.Component;
 public class FilterLogout implements Filter {
     
     private final String clientId;
-    private final String redirectUri;
+    private final String logoutRedirectUri;
     private final String loginGovUrl;
     public FilterLogout(final Environment env) {
         clientId = env.getProperty("clientId");
-        redirectUri = env.getProperty("logoutRedirectUri");
+        logoutRedirectUri = env.getProperty("logoutRedirectUri");
         loginGovUrl = env.getProperty("loginGovUrl");
     }
 
@@ -37,7 +37,7 @@ public class FilterLogout implements Filter {
         final String redirectTo = String.format("%sopenid_connect/logout?"
                 + "client_id=%s&"
                 + "post_logout_redirect_uri=%s&"
-                + "state=%s", loginGovUrl, clientId, redirectUri, state);
+                + "state=%s", loginGovUrl, clientId, logoutRedirectUri, state);
         System.out.println("redirecting to: " + redirectTo);
         ((HttpServletResponse) response).setHeader("HX-Redirect", redirectTo);
         chain.doFilter(request, response);
