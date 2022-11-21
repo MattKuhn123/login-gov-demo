@@ -10,6 +10,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.core.env.Environment;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +35,7 @@ public class ControllerUnauth {
         this.tokenService = tokenService;
     }
     
+
     @GetMapping("/random")
     public String randomNumber() {
         System.out.println("enter [/random (no auth)]");
@@ -46,10 +48,10 @@ public class ControllerUnauth {
         System.out.println("enter [/login]");
 
         final UUID nonce = java.util.UUID.randomUUID();
-        CookieUtils.setHttpCookie(res, CookieUtils.NONCE_NAME, nonce.toString());
+        CookieUtils.setHttpCookie(res, CookieUtils.NONCE_NAME, nonce.toString(), CookieUtils.FIFTEEN_MINUTES);
         
         final UUID state = java.util.UUID.randomUUID();
-        CookieUtils.setHttpCookie(res, CookieUtils.STATE_NAME, state.toString());
+        CookieUtils.setHttpCookie(res, CookieUtils.STATE_NAME, state.toString(), CookieUtils.FIFTEEN_MINUTES);
 
         final String redirectTo = String.format("%s/openid_connect/authorize?"
                 + "acr_values=http://idmanagement.gov/ns/assurance/ial/1&"
@@ -71,7 +73,7 @@ public class ControllerUnauth {
         System.out.println("enter [/logout]");
 
         final UUID state = java.util.UUID.randomUUID();
-        CookieUtils.setHttpCookie(res, CookieUtils.STATE_NAME, state.toString());
+        CookieUtils.setHttpCookie(res, CookieUtils.STATE_NAME, state.toString(), CookieUtils.FIFTEEN_MINUTES);
 
         final String redirectTo = String.format("%sopenid_connect/logout?"
                 + "client_id=%s&"
@@ -87,7 +89,7 @@ public class ControllerUnauth {
     public RedirectView redirectLogin(final ServletRequest req, final ServletResponse res, @RequestParam String code, @RequestParam String state) 
             throws ServletException, IOException {
         System.out.println(String.format("enter [/redirectLogin], code: [%s], state: [%s]", code, state));
-        if (!state.equals(CookieUtils.getHttpCookie(req, CookieUtils.STATE_NAME))) {
+        if (!state.equals(CookieUtils.getCookie(req, CookieUtils.STATE_NAME))) {
             System.out.println("State invalid");
             ((HttpServletResponse) res).sendError(HttpServletResponse.SC_UNAUTHORIZED, "State invalid");
             return new RedirectView("");
@@ -96,7 +98,7 @@ public class ControllerUnauth {
         }
 
         final TokenResponse jwtResponse = tokenService.getToken(code);
-        if (!jwtResponse.getNonce().equals(CookieUtils.getHttpCookie(req, CookieUtils.NONCE_NAME))) {
+        if (!jwtResponse.getNonce().equals(CookieUtils.getCookie(req, CookieUtils.NONCE_NAME))) {
             System.out.println("Nonce invalid");
             ((HttpServletResponse) res).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Nonce invalid");
             return new RedirectView("");
@@ -104,8 +106,9 @@ public class ControllerUnauth {
             System.out.println("Nonce valid");
         }
 
-        CookieUtils.setHttpCookie(res, CookieUtils.JWT_NAME, jwtResponse.getEncodedIdToken());
-        CookieUtils.setHttpCookie(res, CookieUtils.ACCESS_NAME, jwtResponse.getAccessToken());
+        CookieUtils.setHttpCookie(res, CookieUtils.JWT_NAME, jwtResponse.getEncodedIdToken(), jwtResponse.getExpiresIn());
+        CookieUtils.setHttpCookie(res, CookieUtils.ACCESS_NAME, jwtResponse.getAccessToken(), jwtResponse.getExpiresIn());
+        CookieUtils.setClientCookie(res, CookieUtils.AUTHENTICATED_NAME, "", jwtResponse.getExpiresIn());
 
         System.out.println("exit [/redirectLogin]");
         return new RedirectView("");
@@ -115,16 +118,19 @@ public class ControllerUnauth {
     public RedirectView redirectLogout(final ServletRequest req, final ServletResponse res, @RequestParam String state)
             throws ServletException, IOException {
         System.out.println(String.format("enter [/redirectLogout], state: [%s]", state));
-        if (!state.equals(CookieUtils.getHttpCookie(req, CookieUtils.STATE_NAME))) {
+        if (!state.equals(CookieUtils.getCookie(req, CookieUtils.STATE_NAME))) {
             System.out.println("State invalid");
             ((HttpServletResponse) res).sendError(HttpServletResponse.SC_UNAUTHORIZED, "State invalid");
             return new RedirectView("");
+        } else {
+            System.out.println("State valid");
         }
         
-        CookieUtils.setHttpCookie(res, CookieUtils.JWT_NAME, "");
-        CookieUtils.setHttpCookie(res, CookieUtils.ACCESS_NAME, "");
-        CookieUtils.setHttpCookie(res, CookieUtils.STATE_NAME, "");
-        CookieUtils.setHttpCookie(res, CookieUtils.NONCE_NAME, "");
+        CookieUtils.deleteCookie(res, CookieUtils.JWT_NAME);
+        CookieUtils.deleteCookie(res, CookieUtils.ACCESS_NAME);
+        CookieUtils.deleteCookie(res, CookieUtils.STATE_NAME);
+        CookieUtils.deleteCookie(res, CookieUtils.NONCE_NAME);
+        CookieUtils.deleteCookie(res, CookieUtils.AUTHENTICATED_NAME);
 
         System.out.println("exit [/redirectLogout]");
         return new RedirectView("");

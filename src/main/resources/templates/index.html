@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Login Gov Demo</title>
+    <title>Demo Application</title>
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width" />
     <base href="/" />
@@ -15,22 +15,17 @@
             "imports": {
                 "bootstrap": "/webjars/bootstrap/dist/js/bootstrap.esm.min.js",
                 "@popperjs/core": "/webjars/popperjs__core/lib/index.js",
-                "htmx": "/webjars/htmx.org/dist/htmx.min.js",
-                "md": "https://md-block.verou.me/md-block.js"
+                "htmx": "/webjars/htmx.org/dist/htmx.min.js"
             }
         }
     </script>
     <script type="module">
         import 'bootstrap';
         import 'htmx';
-        import 'md';
     </script>
-
 </head>
 
 <body>
-    <header>
-    </header>
     <main>
         <div class="tab-content">
             <div class="jumbotron">
@@ -40,21 +35,15 @@
             <div display="flex">
                 <div display="flex">
                     <h2>Unauthenticated endpoints</h2>
-                    <a class="btn btn-primary" hx-trigger="click" hx-get="/random">Random number</a>
-                    
                     <a class="btn btn-primary" hx-trigger="click" hx-post="/login">Login</a>
-                    
-                    <a class="btn btn-primary" hx-trigger="click" hx-post="/logout">Logout</a>
                 </div>
-                <div display="flex">
+                <div display="flex" th:if="${authenticated}">
                     <h2>Authenticated endpoints</h2>
                     <a class="btn btn-danger" hx-trigger="click" hx-get="/auth/random">(auth) Random number</a>
-        
                     <a class="btn btn-danger" hx-trigger="click" hx-get="/auth/email">Email</a>
+                    <a class="btn btn-danger" hx-trigger="click" hx-post="/logout">Logout</a>
                 </div>
             </div>
-
-            
         </div>
     </main>
 </body>

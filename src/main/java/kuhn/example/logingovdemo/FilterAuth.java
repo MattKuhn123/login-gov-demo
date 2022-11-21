@@ -33,7 +33,7 @@ public class FilterAuth implements Filter {
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         System.out.println(String.format("enter [%s]", getClass().getName()));
 
-        final DecodedJWT decodedJWT = JWT.decode(CookieUtils.getHttpCookie(req, CookieUtils.JWT_NAME));
+        final DecodedJWT decodedJWT = JWT.decode(CookieUtils.getCookie(req, CookieUtils.JWT_NAME));
         if (!decodedJWT.getIssuer().equals(loginGovUrl)) {
             System.out.println("Invalid issuer");
             ((HttpServletResponse) res).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid issuer");
@@ -52,7 +52,7 @@ public class FilterAuth implements Filter {
             return;
         }
 
-        if (!decodedJWT.getClaim("nonce").asString().substring(1).equals(CookieUtils.getHttpCookie(req, CookieUtils.NONCE_NAME))) {
+        if (!decodedJWT.getClaim("nonce").asString().substring(1).equals(CookieUtils.getCookie(req, CookieUtils.NONCE_NAME))) {
             System.out.println("Invalid nonce");
             ((HttpServletResponse) res).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid nonce");
             return;
@@ -64,7 +64,7 @@ public class FilterAuth implements Filter {
     }
 
     @Bean
-    public FilterRegistrationBean<FilterAuth> jwtFilter() {
+    public FilterRegistrationBean<FilterAuth> authFilter() {
         FilterRegistrationBean<FilterAuth> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(this);
         registrationBean.addUrlPatterns("/auth/*");
