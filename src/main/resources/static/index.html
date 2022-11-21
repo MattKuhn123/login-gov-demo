@@ -30,23 +30,18 @@
 
 <body>
     <header>
-        <nav class="nav nav-tabs">
-            <a class="nav-link" data-bs-toggle="tab" data-bs-target="#your-application" href="#">Your Application</a>
-        </nav>
     </header>
     <main>
         <div class="tab-content">
-            <div class="tab-pane fade show active" id="your-application" role="tabpanel">
-                <div class="jumbotron">
-                    <h1 class="display-4">Your application</h1>
-                    <a class="btn btn-danger" id="refresh-your-application">
-                        Refresh your application
-                    </a>
-                    <hr>
-                </div>
-                <div id="your-application-placeholder" hx-trigger="load, click from:#refresh-your-application" hx-get="./your-application-todo.html">
-                    Click the button above to refresh... 
-                </div>
+            <div class="jumbotron">
+                <h1 class="display-4">Demo Application</h1>
+                <a class="btn btn-danger" id="refresh-your-application">
+                    Refresh your application
+                </a>
+                <hr>
+            </div>
+            <div id="your-application-placeholder" hx-trigger="load, click from:#refresh-your-application" hx-get="./your-application-todo.html">
+                Click the button above to refresh... 
             </div>
         </div>
     </main>
