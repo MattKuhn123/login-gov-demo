@@ -35,26 +35,12 @@ public class FilterAuth implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         System.out.println(String.format("enter [%s]", getClass().getName()));
 
-        boolean iss = false;
-        boolean aud = false;
-        boolean expired = true;
-        boolean non = false;
-
         final String nonce = Utils.getCookie(request, Utils.NONCE_NAME);
-
-        for(final Cookie c : ((HttpServletRequest) request).getCookies()) {
-            if (!Utils.JWT_NAME.equals(c.getName())) {
-                continue;
-            }
-
-            try {
-                final DecodedJWT decodedJWT = JWT.decode(c.getValue());
-                iss = decodedJWT.getIssuer().equals(loginGovUrl);
-                aud = decodedJWT.getClaim("aud").asString().equals(clientId);
-                expired = new Date(Instant.now().toEpochMilli()).compareTo(decodedJWT.getExpiresAt()) > 0;
-                non = decodedJWT.getClaim("nonce").asString().substring(1).equals(nonce);
-            } catch (final Exception e) { }
-        }
+        final DecodedJWT decodedJWT = JWT.decode(Utils.getCookie(request, Utils.JWT_NAME));
+        final boolean iss = decodedJWT.getIssuer().equals(loginGovUrl);
+        final boolean aud = decodedJWT.getClaim("aud").asString().equals(clientId);
+        final boolean expired = new Date(Instant.now().toEpochMilli()).compareTo(decodedJWT.getExpiresAt()) > 0;
+        final boolean non = decodedJWT.getClaim("nonce").asString().substring(1).equals(nonce);
         
         if (iss && aud && !expired && non) {
             chain.doFilter(request, response);
