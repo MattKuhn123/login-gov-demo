@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
+import org.thymeleaf.util.StringUtils;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
@@ -105,9 +106,13 @@ public class ControllerUnauth {
     }
 
     @GetMapping("/redirectLogin")
-    public RedirectView redirectLogin(final ServletRequest req, final ServletResponse res, @RequestParam String code, @RequestParam String state) 
+    public RedirectView redirectLogin(final ServletRequest req, final ServletResponse res, @RequestParam String code, @RequestParam String state, @RequestParam String error) 
             throws ServletException, IOException {
-        System.out.println(String.format("enter [/redirectLogin], code: [%s], state: [%s]", code, state));
+        System.out.println(String.format("enter [/redirectLogin], code: [%s], state: [%s], error: [%s]", code, state, error));
+        if (!StringUtils.isEmptyOrWhitespace(error)) {
+            return new RedirectView("error");
+        }
+
         if (!state.equals(CookieUtils.getCookie(req, CookieUtils.STATE_NAME))) {
             System.out.println("State invalid");
             ((HttpServletResponse) res).sendError(HttpServletResponse.SC_UNAUTHORIZED, "State invalid");

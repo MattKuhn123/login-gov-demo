@@ -32,16 +32,31 @@
                 <h1 class="display-4">Demo Application</h1>
                 <hr>
             </div>
-            <div display="flex">
-                <div display="flex">
-                    <h2>Unauthenticated endpoints</h2>
-                    <a class="btn btn-primary" hx-trigger="click" hx-post="/login">Login</a>
+            <div style="display: flex">
+                <div class="card bg-light mb-3" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Always Displayed</h5>
+                        <p class="card-text">This is displayed whether you are logged in or not</p>
+                        <a class="btn btn-info" hx-trigger="click" hx-get="/random">(auth) Random number</a>
+                    </div>
                 </div>
-                <div display="flex" th:if="${authenticated}">
-                    <h2>Authenticated endpoints</h2>
-                    <a class="btn btn-danger" hx-trigger="click" hx-get="/auth/random">(auth) Random number</a>
-                    <a class="btn btn-danger" hx-trigger="click" hx-get="/auth/email">Email</a>
-                    <a class="btn btn-danger" hx-trigger="click" hx-post="/logout">Logout</a>
+
+                <div class="card bg-light mb-3" style="width: 18rem;" th:if="${!authenticated}">
+                    <div class="card-body">
+                        <h5 class="card-title">Unauthenticated</h5>
+                        <p class="card-text">This is displayed only when you aren't logged in</p>
+                        <a class="btn btn-primary" hx-trigger="click" hx-post="/login">Login</a>
+                    </div>
+                </div>
+
+                <div class="card text-white bg-dark mb-3" style="width: 18rem;" th:if="${authenticated}">
+                    <div class="card-body">
+                        <h5 class="card-title">Authenticated</h5>
+                        <p class="card-text">This is displayed after logged in</p>
+                        <a class="btn btn-danger" hx-trigger="click" hx-get="/auth/random">(auth) Random number</a>
+                        <a class="btn btn-danger" hx-trigger="click" hx-get="/auth/email">Email</a>
+                        <a class="btn btn-danger" hx-trigger="click" hx-post="/logout">Logout</a>
+                    </div>
                 </div>
             </div>
         </div>
