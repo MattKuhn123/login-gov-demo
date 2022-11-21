@@ -53,6 +53,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Authenticated</h5>
                         <p class="card-text">This is displayed after logging in</p>
+                        <p class="card-text" hx-trigger="load, every 1s" hx-get="/auth/expires">expiration countdown</p>
                         <div style="display: flex;flex-wrap: wrap;flex-direction: column;gap: 10px;">
                             <a class="btn btn-danger" hx-trigger="click" hx-get="/auth/random">(auth) Random number</a>
                             <a class="btn btn-danger" hx-trigger="click" hx-get="/auth/email">Get user email</a>
