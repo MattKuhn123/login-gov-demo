@@ -38,7 +38,7 @@ public class TokenResponse {
 
     public String getNonce() {
         final DecodedJWT decodedJWT = JWT.decode(encodedIdToken);
-        return decodedJWT.getClaim("nonce").asString();
+        return decodedJWT.getClaim("nonce").asString().substring(1);
     }
 
     @Override

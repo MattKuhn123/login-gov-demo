@@ -7,8 +7,6 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -31,62 +29,28 @@ public class FilterRedirectResponse implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-            throws IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         System.out.println(String.format("enter [%s]", getClass().getName()));
         final String code = request.getParameter("code");
         final String state = request.getParameter("state");
 
-        boolean correctState = false;
-        for(final Cookie c : ((HttpServletRequest) request).getCookies()) {
-            if (!Utils.STATE_NAME.equals(c.getName())) {
-                continue;
-            }
-
-            correctState = c.getValue().equals(state);
-        }
-
-        if (!correctState) {
+        if (!state.equals(Utils.getCookie(request, Utils.STATE_NAME))) {
             ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "State invalid.");
             return;
         }
 
-        final String url = String.format("%sapi/openid_connect/token?"
-                + "client_assertion=%s&"
-                + "client_assertion_type=urn:ietf:params:oauth:client-assertion-type:jwt-bearer&"
-                + "code=%s&"
-                + "grant_type=authorization_code", loginGovUrl, Utils.createClientAssertion(clientId, loginGovUrl), code);
-
-        System.out.println(String.format("Request: [%s]", url));
-        final TokenResponse jwtResponse = restTemplate.postForObject(url, null, TokenResponse.class);
-        if (jwtResponse == null) {
-            ((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to get authentication token.");
-            return;
-        }
-
-        System.out.println(String.format("Result: [%s]", jwtResponse.toString()));
+        final TokenResponse jwtResponse = getToken(code);
         if (!loginGovUrl.equals(jwtResponse.getIssuer())) {
-            ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token invalid.");
+            ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Issuer invalid.");
             return;
         }
 
-        boolean correctNonce = false;
-        for(final Cookie c : ((HttpServletRequest) request).getCookies()) {
-            if (!Utils.NONCE_NAME.equals(c.getName())) {
-                continue;
-            }
-
-            correctNonce = c.getValue().equals(jwtResponse.getNonce());
-        }
-
-        if (!correctNonce) {
+        if (!jwtResponse.getNonce().equals(Utils.getCookie(request, Utils.NONCE_NAME))) {
             ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Nonce invalid.");
             return;
         }
 
-        final Cookie cookie = new Cookie(Utils.JWT_NAME, jwtResponse.getEncodedIdToken());
-        cookie.setHttpOnly(true);
-        ((HttpServletResponse) response).addCookie(cookie);
+        Utils.setHttpCookie(response, Utils.JWT_NAME, jwtResponse.getEncodedIdToken());
 
         chain.doFilter(request, response);
         System.out.println(String.format("exit [%s]", getClass().getName()));
@@ -98,5 +62,22 @@ public class FilterRedirectResponse implements Filter {
         registrationBean.setFilter(this);
         registrationBean.addUrlPatterns("/redirect");
         return registrationBean; 
+    }
+
+    private TokenResponse getToken(final String code) throws ServletException {
+        final String url = String.format("%sapi/openid_connect/token?"
+                + "client_assertion=%s&"
+                + "client_assertion_type=urn:ietf:params:oauth:client-assertion-type:jwt-bearer&"
+                + "code=%s&"
+                + "grant_type=authorization_code", loginGovUrl, Utils.createClientAssertion(clientId, loginGovUrl), code);
+
+        System.out.println(String.format("Request: [%s]", url));
+        final TokenResponse jwtResponse = restTemplate.postForObject(url, null, TokenResponse.class);
+        if (jwtResponse == null) {
+            throw new ServletException("Failed to get token");
+        }
+
+        System.out.println(String.format("Result: [%s]", jwtResponse.toString()));
+        return jwtResponse;
     }
 }

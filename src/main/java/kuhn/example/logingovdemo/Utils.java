@@ -7,6 +7,12 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.time.Instant;
 import java.util.Base64;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.util.FileCopyUtils;
 
@@ -55,5 +61,28 @@ public class Utils {
             e.printStackTrace();
             throw e;
         }
+    }
+
+    public static String getCookie(final ServletRequest request, final String key) {
+        for (final Cookie c : ((HttpServletRequest)request).getCookies()) {
+            if (!key.equals(c.getName())) {
+                continue;
+            }
+
+            return c.getValue();
+        }
+
+        throw new IllegalArgumentException(String.format("Did not find [%s] in cookies", key));
+    }
+
+    public static void setHttpCookie(final ServletResponse response, final String key, final String value) {
+        final Cookie cookie = new Cookie(Utils.NONCE_NAME, "");
+        cookie.setHttpOnly(true);
+
+        if ("".equals(value)) {
+            cookie.setMaxAge(0);
+        }
+
+        ((HttpServletResponse) response).addCookie(cookie);
     }
 }

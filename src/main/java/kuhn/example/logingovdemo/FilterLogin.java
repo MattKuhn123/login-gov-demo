@@ -8,7 +8,6 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -29,19 +28,14 @@ public class FilterLogin implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-            throws IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         System.out.println(String.format("enter [%s]", getClass().getName()));
 
         final UUID nonce = java.util.UUID.randomUUID();
-        final Cookie nonceCookie = new Cookie(Utils.NONCE_NAME, nonce.toString());
-        nonceCookie.setHttpOnly(true);
-        ((HttpServletResponse) response).addCookie(nonceCookie);
+        Utils.setHttpCookie(response, Utils.NONCE_NAME, nonce.toString());
         
         final UUID state = java.util.UUID.randomUUID();
-        final Cookie stateCookie = new Cookie(Utils.STATE_NAME, state.toString());
-        stateCookie.setHttpOnly(true);
-        ((HttpServletResponse) response).addCookie(stateCookie);
+        Utils.setHttpCookie(response, Utils.STATE_NAME, state.toString());
 
         final String redirectTo = String.format("%s/openid_connect/authorize?"
                 + "acr_values=http://idmanagement.gov/ns/assurance/ial/1&"

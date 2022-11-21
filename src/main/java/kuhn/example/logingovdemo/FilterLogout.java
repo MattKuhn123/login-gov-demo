@@ -8,7 +8,6 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -29,14 +28,11 @@ public class FilterLogout implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-            throws IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         System.out.println(String.format("enter [%s]", getClass().getName()));
 
         final UUID state = java.util.UUID.randomUUID();
-        final Cookie stateCookie = new Cookie(Utils.STATE_NAME, state.toString());
-        stateCookie.setHttpOnly(true);
-        ((HttpServletResponse) response).addCookie(stateCookie);
+        Utils.setHttpCookie(response, Utils.STATE_NAME, state.toString());
 
         final String redirectTo = String.format("%sopenid_connect/logout?"
                 + "client_id=%s&"
@@ -46,15 +42,8 @@ public class FilterLogout implements Filter {
         ((HttpServletResponse) response).setHeader("HX-Redirect", redirectTo);
         chain.doFilter(request, response);
 
-        final Cookie jwtCookie = new Cookie(Utils.JWT_NAME, "");
-        jwtCookie.setHttpOnly(true);
-        jwtCookie.setMaxAge(0);
-        ((HttpServletResponse) response).addCookie(jwtCookie);
-
-        final Cookie nonceCookies = new Cookie(Utils.NONCE_NAME, "");
-        nonceCookies.setHttpOnly(true);
-        nonceCookies.setMaxAge(0);
-        ((HttpServletResponse) response).addCookie(nonceCookies);
+        Utils.setHttpCookie(response, Utils.JWT_NAME, "");
+        Utils.setHttpCookie(response, Utils.NONCE_NAME, "");
         
         System.out.println(String.format("exit [%s]", getClass().getName()));
     }

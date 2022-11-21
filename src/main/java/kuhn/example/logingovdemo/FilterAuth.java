@@ -32,13 +32,16 @@ public class FilterAuth implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-            throws IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         System.out.println(String.format("enter [%s]", getClass().getName()));
 
         boolean iss = false;
         boolean aud = false;
         boolean expired = true;
+        boolean non = false;
+
+        final String nonce = Utils.getCookie(request, Utils.NONCE_NAME);
+
         for(final Cookie c : ((HttpServletRequest) request).getCookies()) {
             if (!Utils.JWT_NAME.equals(c.getName())) {
                 continue;
@@ -49,13 +52,14 @@ public class FilterAuth implements Filter {
                 iss = decodedJWT.getIssuer().equals(loginGovUrl);
                 aud = decodedJWT.getClaim("aud").asString().equals(clientId);
                 expired = new Date(Instant.now().toEpochMilli()).compareTo(decodedJWT.getExpiresAt()) > 0;
+                non = decodedJWT.getClaim("nonce").asString().substring(1).equals(nonce);
             } catch (final Exception e) { }
         }
         
-        if (iss && aud && !expired) {
+        if (iss && aud && !expired && non) {
             chain.doFilter(request, response);
         } else {
-            ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "The token is not valid.");
+            ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token invalid.");
             return;
         }
 
