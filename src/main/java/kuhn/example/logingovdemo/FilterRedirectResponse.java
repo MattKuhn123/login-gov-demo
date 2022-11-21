@@ -47,7 +47,7 @@ public class FilterRedirectResponse implements Filter {
         }
 
         if (!correctState) {
-            ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "The token is not valid.");
+            ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "State invalid.");
             return;
         }
 
@@ -66,7 +66,21 @@ public class FilterRedirectResponse implements Filter {
 
         System.out.println(String.format("Result: [%s]", jwtResponse.toString()));
         if (!loginGovUrl.equals(jwtResponse.getIssuer())) {
-            ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "The token is not valid.");
+            ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token invalid.");
+            return;
+        }
+
+        boolean correctNonce = false;
+        for(final Cookie c : ((HttpServletRequest) request).getCookies()) {
+            if (!Utils.NONCE_NAME.equals(c.getName())) {
+                continue;
+            }
+
+            correctNonce = c.getValue().equals(jwtResponse.getNonce());
+        }
+
+        if (!correctNonce) {
+            ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Nonce invalid.");
             return;
         }
 

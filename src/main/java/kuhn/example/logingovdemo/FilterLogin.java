@@ -34,12 +34,11 @@ public class FilterLogin implements Filter {
         System.out.println(String.format("enter [%s]", getClass().getName()));
 
         final UUID nonce = java.util.UUID.randomUUID();
-        final UUID state = java.util.UUID.randomUUID();
-
         final Cookie nonceCookie = new Cookie(Utils.NONCE_NAME, nonce.toString());
         nonceCookie.setHttpOnly(true);
         ((HttpServletResponse) response).addCookie(nonceCookie);
-
+        
+        final UUID state = java.util.UUID.randomUUID();
         final Cookie stateCookie = new Cookie(Utils.STATE_NAME, state.toString());
         stateCookie.setHttpOnly(true);
         ((HttpServletResponse) response).addCookie(stateCookie);

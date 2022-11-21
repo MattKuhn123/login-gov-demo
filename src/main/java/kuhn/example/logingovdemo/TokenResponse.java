@@ -14,7 +14,6 @@ public class TokenResponse {
     private int expiresIn;
     @JsonProperty("id_token")
     private String encodedIdToken;
-    private String issuer;
 
     public String getAccessToken() {
         return accessToken;
@@ -37,8 +36,13 @@ public class TokenResponse {
         return decodedJWT.getIssuer();
     }
 
+    public String getNonce() {
+        final DecodedJWT decodedJWT = JWT.decode(encodedIdToken);
+        return decodedJWT.getClaim("nonce").asString();
+    }
+
     @Override
     public String toString() {
-        return String.format("access_token: [%s] token_type: [%s], expires_in: [%s], encodedIdToken: [%s], iss: [%s]", accessToken, tokenType, expiresIn, encodedIdToken, issuer);
+        return String.format("access_token: [%s] token_type: [%s], expires_in: [%s], encodedIdToken: [%s]", accessToken, tokenType, expiresIn, encodedIdToken);
     }
 }
