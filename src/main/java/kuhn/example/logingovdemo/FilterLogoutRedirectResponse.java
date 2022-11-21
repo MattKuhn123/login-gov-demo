@@ -21,15 +21,15 @@ public class FilterLogoutRedirectResponse implements Filter {
         System.out.println(String.format("enter [%s]", getClass().getName()));
 
         final String state = request.getParameter("state");
-        if (!state.equals(Utils.getHttpCookie(request, Utils.STATE_NAME))) {
+        if (!state.equals(UtilsCookies.getHttpCookie(request, UtilsCookies.STATE_NAME))) {
             System.out.println("State invalid");
             ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "State invalid");
             return;
         }
         
-        Utils.setHttpCookie(response, Utils.JWT_NAME, "");
-        Utils.setHttpCookie(response, Utils.STATE_NAME, "");
-        Utils.setHttpCookie(response, Utils.NONCE_NAME, "");
+        UtilsCookies.setHttpCookie(response, UtilsCookies.JWT_NAME, "");
+        UtilsCookies.setHttpCookie(response, UtilsCookies.STATE_NAME, "");
+        UtilsCookies.setHttpCookie(response, UtilsCookies.NONCE_NAME, "");
 
         chain.doFilter(request, response);
 

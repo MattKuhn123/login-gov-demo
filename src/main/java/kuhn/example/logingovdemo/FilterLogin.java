@@ -32,10 +32,10 @@ public class FilterLogin implements Filter {
         System.out.println(String.format("enter [%s]", getClass().getName()));
 
         final UUID nonce = java.util.UUID.randomUUID();
-        Utils.setHttpCookie(response, Utils.NONCE_NAME, nonce.toString());
+        UtilsCookies.setHttpCookie(response, UtilsCookies.NONCE_NAME, nonce.toString());
         
         final UUID state = java.util.UUID.randomUUID();
-        Utils.setHttpCookie(response, Utils.STATE_NAME, state.toString());
+        UtilsCookies.setHttpCookie(response, UtilsCookies.STATE_NAME, state.toString());
 
         final String redirectTo = String.format("%s/openid_connect/authorize?"
                 + "acr_values=http://idmanagement.gov/ns/assurance/ial/1&"

@@ -33,8 +33,8 @@ public class FilterAuth implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         System.out.println(String.format("enter [%s]", getClass().getName()));
 
-        final String nonce = Utils.getHttpCookie(request, Utils.NONCE_NAME);
-        final DecodedJWT decodedJWT = JWT.decode(Utils.getHttpCookie(request, Utils.JWT_NAME));
+        final String nonce = UtilsCookies.getHttpCookie(request, UtilsCookies.NONCE_NAME);
+        final DecodedJWT decodedJWT = JWT.decode(UtilsCookies.getHttpCookie(request, UtilsCookies.JWT_NAME));
         final boolean iss = decodedJWT.getIssuer().equals(loginGovUrl);
         final boolean aud = decodedJWT.getClaim("aud").asString().equals(clientId);
         final boolean expired = new Date(Instant.now().toEpochMilli()).compareTo(decodedJWT.getExpiresAt()) > 0;
