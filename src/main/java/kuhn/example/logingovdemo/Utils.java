@@ -28,7 +28,7 @@ public class Utils {
 
     public static void setHttpCookie(final ServletResponse response, final String key, final String value) {
         System.out.println(String.format("Setting cookie: [%s], [%s]", key, value));
-        final Cookie cookie = new Cookie(Utils.NONCE_NAME, "");
+        final Cookie cookie = new Cookie(key, "");
         cookie.setHttpOnly(true);
 
         if ("".equals(value)) {
