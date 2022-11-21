@@ -110,13 +110,16 @@ public class FilterRedirectResponse implements Filter {
         }
     }
 
+
+    // TODO : Replace with your pem
+    private final String PEM_LOCATION = "classpath:security\\private-kuhn-demo.pem"; 
     private RSAPrivateKey getPrivateKey() throws Exception {
         try {
             return (RSAPrivateKey) KeyFactory.getInstance("RSA")
                     .generatePrivate(new PKCS8EncodedKeySpec(Base64.getDecoder()
                             .decode(FileCopyUtils
                                     .copyToString(new InputStreamReader(
-                                            new DefaultResourceLoader().getResource(Utils.PEM_LOCATION).getInputStream()))
+                                            new DefaultResourceLoader().getResource(PEM_LOCATION).getInputStream()))
                                     .replace("-----BEGIN PRIVATE KEY-----", "")
                                     .replaceAll("\n", "").replace("-----END PRIVATE KEY-----", ""))));
         } catch (Exception e) {
