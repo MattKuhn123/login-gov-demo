@@ -13,8 +13,10 @@ import org.springframework.util.FileCopyUtils;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 
-public class UtilsJwt {
+public class Utils {
     public static final String JWT_NAME = "kuhn.example.jwt";
+    public static final String STATE_NAME = "kuhn.example.state";
+    public static final String NONCE_NAME = "kuhn.example.nonce";
     // TODO : Replace with your pem
     public static final String PEM_LOCATION = "classpath:security\\private-kuhn-demo.pem"; 
 

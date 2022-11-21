@@ -1,26 +1,20 @@
 package kuhn.example.logingovdemo;
 
-import org.codehaus.jettison.json.JSONObject;
-
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class TokenResponse {
 
-    private final String accessToken;
-    private final String tokenType;
-    private final int expiresIn;
-    private final String encodedIdToken;
-    private final String issuer;
-
-    public TokenResponse(final JSONObject jsonObject) throws Exception {
-        accessToken = (String) jsonObject.get("access_token");
-        tokenType = (String) jsonObject.get("token_type");
-        expiresIn = (int) jsonObject.get("expires_in");
-        encodedIdToken = (String) jsonObject.get("id_token");
-        final DecodedJWT decodedJWT = JWT.decode(encodedIdToken);
-        issuer = decodedJWT.getIssuer();
-    }
+    @JsonProperty("access_token")
+    private String accessToken;
+    @JsonProperty("token_type")
+    private String tokenType;
+    @JsonProperty("expires_in")
+    private int expiresIn;
+    @JsonProperty("id_token")
+    private String encodedIdToken;
+    private String issuer;
 
     public String getAccessToken() {
         return accessToken;
@@ -39,7 +33,8 @@ public class TokenResponse {
     }
 
     public String getIssuer() {
-        return issuer;
+        final DecodedJWT decodedJWT = JWT.decode(encodedIdToken);
+        return decodedJWT.getIssuer();
     }
 
     @Override

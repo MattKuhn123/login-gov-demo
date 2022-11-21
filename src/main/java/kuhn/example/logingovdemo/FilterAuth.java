@@ -22,11 +22,11 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
 @Component
-public class FilterJwt implements Filter {
+public class FilterAuth implements Filter {
 
     private final String clientId;
     private final String loginGovUrl;
-    public FilterJwt(final Environment env) {
+    public FilterAuth(final Environment env) {
         clientId = env.getProperty("clientId");
         loginGovUrl = env.getProperty("loginGovUrl");
     }
@@ -40,7 +40,7 @@ public class FilterJwt implements Filter {
         boolean aud = false;
         boolean expired = true;
         for(final Cookie c : ((HttpServletRequest) request).getCookies()) {
-            if (!UtilsJwt.JWT_NAME.equals(c.getName())) {
+            if (!Utils.JWT_NAME.equals(c.getName())) {
                 continue;
             }
 
@@ -63,8 +63,8 @@ public class FilterJwt implements Filter {
     }
 
     @Bean
-    public FilterRegistrationBean<FilterJwt> jwtFilter() {
-        FilterRegistrationBean<FilterJwt> registrationBean = new FilterRegistrationBean<>();
+    public FilterRegistrationBean<FilterAuth> jwtFilter() {
+        FilterRegistrationBean<FilterAuth> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(this);
         registrationBean.addUrlPatterns("/auth/*");
         return registrationBean; 

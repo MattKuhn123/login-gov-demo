@@ -1,6 +1,7 @@
 package kuhn.example.logingovdemo;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -31,17 +32,29 @@ public class FilterLogout implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         System.out.println(String.format("enter [%s]", getClass().getName()));
+
+        final UUID state = java.util.UUID.randomUUID();
+        final Cookie stateCookie = new Cookie(Utils.STATE_NAME, state.toString());
+        stateCookie.setHttpOnly(true);
+        ((HttpServletResponse) response).addCookie(stateCookie);
+
         final String redirectTo = String.format("%sopenid_connect/logout?"
                 + "client_id=%s&"
                 + "post_logout_redirect_uri=%s&"
-                + "state=%s", loginGovUrl, clientId, redirectUri, java.util.UUID.randomUUID());
+                + "state=%s", loginGovUrl, clientId, redirectUri, state);
         System.out.println("redirecting to: " + redirectTo);
         ((HttpServletResponse) response).setHeader("HX-Redirect", redirectTo);
         chain.doFilter(request, response);
 
-        Cookie cookie = new Cookie(UtilsJwt.JWT_NAME, "");
-        cookie.setHttpOnly(true);
-        ((HttpServletResponse) response).addCookie(cookie);
+        final Cookie jwtCookie = new Cookie(Utils.JWT_NAME, "");
+        jwtCookie.setHttpOnly(true);
+        jwtCookie.setMaxAge(0);
+        ((HttpServletResponse) response).addCookie(jwtCookie);
+
+        final Cookie nonceCookies = new Cookie(Utils.NONCE_NAME, "");
+        nonceCookies.setHttpOnly(true);
+        nonceCookies.setMaxAge(0);
+        ((HttpServletResponse) response).addCookie(nonceCookies);
         
         System.out.println(String.format("exit [%s]", getClass().getName()));
     }
