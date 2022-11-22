@@ -37,7 +37,8 @@ public class ControllerAuth {
             System.out.println("exit [/auth/expires]");
             return String.format("expires in: [%s]s", decodedJWT.getExpiresAtAsInstant().minusMillis(Instant.now().toEpochMilli()).getEpochSecond());
         } catch (final Exception e) {
-            System.out.println("exit [/auth/expires]");
+            System.out.println("error in [/auth/expires]");
+            e.printStackTrace();
             return "Unknown";
         }
         
