@@ -1,0 +1,1 @@
+a PEM and CERT should not be together in a real application.

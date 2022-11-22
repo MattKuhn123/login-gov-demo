@@ -1,5 +1,9 @@
 # Login.gov demo
 
+## Login.gov application
+
+*This demo application already has an application in login.gov created.*
+
 ## How the front-end is authenticated
 
 The homepage is `src/main/resources/templates/index.html`.  
@@ -21,7 +25,7 @@ This attribute is calculated based on the presence and expiration status of a `J
         return m;
     }
 ```
-
+  
 ``` html
     <div id="display-if-no-auth" class="card bg-light mb-3" style="width: 18rem;" th:if="${!authenticated}">
     ...
@@ -295,3 +299,10 @@ public class FilterAuth implements Filter {
 
     - Notice that it calls the `/login` endpoint. The logic to *refresh* the `JWT token` is the exact same as to *create* it.
     - Login.gov will not require the user to re-enter their credentials if the `JWT token` is not expired.
+
+## Warning
+
+Every security scheme requires diligence from the developer.  
+If something on the front-end should be secured, then the developer will have to prevent it from reaching the DOM with `th:if="${authenticated}"`.  
+If something on the back-end should be secured, then the developer will have to make sure that the mapping begins with `/auth`.  
+No security scheme is fool-proof; the developer will need to be vigilant.
