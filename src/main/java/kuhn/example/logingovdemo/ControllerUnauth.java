@@ -43,7 +43,7 @@ public class ControllerUnauth {
     
     @GetMapping("/")
     public ModelAndView index(final ServletRequest req) {
-        ModelAndView m = new ModelAndView();
+        final ModelAndView m = new ModelAndView();
         m.setViewName("index");
         try {
             final DecodedJWT decodedJWT = JWT.decode(CookieUtils.getCookie(req, CookieUtils.JWT_NAME));
@@ -72,7 +72,7 @@ public class ControllerUnauth {
         final UUID state = java.util.UUID.randomUUID();
         CookieUtils.setHttpCookie(res, CookieUtils.STATE_NAME, state.toString(), CookieUtils.FIFTEEN_MINUTES);
 
-        final String redirectTo = String.format("%s/openid_connect/authorize?"
+        final String forwardToLogingov = String.format("%s/openid_connect/authorize?"
                 + "acr_values=http://idmanagement.gov/ns/assurance/ial/1&"
                 + "client_id=%s&"
                 + "nonce=$%s&"
@@ -81,8 +81,9 @@ public class ControllerUnauth {
                 + "response_type=code&"
                 + "scope=openid+email&"
                 + "state=%s", loginGovUrl, clientId, nonce, loginRedirectUri, state);
-        System.out.println("redirecting to: " + redirectTo);
-        ((HttpServletResponse) res).setHeader("HX-Redirect", redirectTo);
+        System.out.println("forwarding to: " + forwardToLogingov);
+        // forward user to logingov
+        ((HttpServletResponse) res).setHeader("HX-Redirect", forwardToLogingov);
 
         System.out.println("exit [/login]");
     }
@@ -120,7 +121,10 @@ public class ControllerUnauth {
             System.out.println("State valid");
         }
 
+        // use code to request jwt token
         final TokenResponse jwtResponse = tokenService.getToken(code);
+        
+        // validate jwt token
         if (!jwtResponse.getNonce().equals(CookieUtils.getCookie(req, CookieUtils.NONCE_NAME))) {
             System.out.println("Nonce invalid");
             ((HttpServletResponse) res).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Nonce invalid");
@@ -131,7 +135,6 @@ public class ControllerUnauth {
 
         CookieUtils.setHttpCookie(res, CookieUtils.JWT_NAME, jwtResponse.getEncodedIdToken(), jwtResponse.getExpiresIn());
         CookieUtils.setHttpCookie(res, CookieUtils.ACCESS_NAME, jwtResponse.getAccessToken(), jwtResponse.getExpiresIn());
-        CookieUtils.setClientCookie(res, CookieUtils.AUTHENTICATED_NAME, "", jwtResponse.getExpiresIn());
 
         System.out.println("exit [/redirectLogin]");
         return new RedirectView("");
@@ -153,7 +156,6 @@ public class ControllerUnauth {
         CookieUtils.deleteCookie(res, CookieUtils.ACCESS_NAME);
         CookieUtils.deleteCookie(res, CookieUtils.STATE_NAME);
         CookieUtils.deleteCookie(res, CookieUtils.NONCE_NAME);
-        CookieUtils.deleteCookie(res, CookieUtils.AUTHENTICATED_NAME);
 
         System.out.println("exit [/redirectLogout]");
         return new RedirectView("");

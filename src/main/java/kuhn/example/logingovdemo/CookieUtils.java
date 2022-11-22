@@ -11,7 +11,6 @@ public class CookieUtils {
     public static final String ACCESS_NAME = "kuhn.example.cookie.access";
     public static final String STATE_NAME = "kuhn.example.cookie.state";
     public static final String NONCE_NAME = "kuhn.example.cookie.nonce";
-    public static final String AUTHENTICATED_NAME = "kuhn.example.cookie.authenticated";
     public static final int FIFTEEN_MINUTES = 15 * 60;
 
     public static String getCookie(final ServletRequest req, final String key) {
